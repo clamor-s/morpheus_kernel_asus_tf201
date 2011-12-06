@@ -943,9 +943,34 @@ void sock_diag_unregister(struct sock_diag_handler *hnld)
 	mutex_unlock(&sock_diag_table_mutex);
 }
 
+static inline struct sock_diag_handler *sock_diag_lock_handler(int family)
+{
+	mutex_lock(&sock_diag_table_mutex);
+	return sock_diag_handlers[family];
+}
+
+static inline void sock_diag_unlock_handler(struct sock_diag_handler *h)
+{
+	mutex_unlock(&sock_diag_table_mutex);
+}
+
 static int __sock_diag_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 {
-	return -EOPNOTSUPP;
+	int err;
+	struct sock_diag_req *req = NLMSG_DATA(nlh);
+	struct sock_diag_handler *hndl;
+
+	if (nlmsg_len(nlh) < sizeof(*req))
+		return -EINVAL;
+
+	hndl = sock_diag_lock_handler(req->sdiag_family);
+	if (hndl == NULL)
+		err = -ENOENT;
+	else
+		err = hndl->dump(skb, nlh);
+	sock_diag_unlock_handler(hndl);
+
+	return err;
 }
 
 static int sock_diag_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
