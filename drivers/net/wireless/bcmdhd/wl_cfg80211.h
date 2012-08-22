@@ -65,16 +65,16 @@ struct wl_ibss;
 #define	WL_ERR(args)								\
 do {										\
 	if (wl_dbg_level & WL_DBG_ERR) {					\
-			printf(KERN_ERR "CFG80211-ERROR) %s : ", __func__);	\
-			printf args;						\
+			printk(KERN_ERR "CFG80211-ERROR) %s : ", __func__);	\
+			printk args;						\
 		} 								\
 } while (0)
 #else /* defined(DHD_DEBUG) */
 #define	WL_ERR(args)								\
 do {										\
 	if ((wl_dbg_level & WL_DBG_ERR) && net_ratelimit())  {			\
-			printf(KERN_INFO "CFG80211-ERROR) %s : ", __func__);	\
-			printf args;						\
+			printk(KERN_INFO "CFG80211-ERROR) %s : ", __func__);	\
+			printk args;						\
 		} 								\
 } while (0)
 #endif /* defined(DHD_DEBUG) */
@@ -85,8 +85,8 @@ do {										\
 #define	WL_INFO(args)									\
 do {										\
 	if (wl_dbg_level & WL_DBG_INFO) {				\
-			printf(KERN_ERR "CFG80211-INFO) %s : ", __func__);	\
-			printf args;						\
+			printk(KERN_ERR "CFG80211-INFO) %s : ", __func__);	\
+			printk args;						\
 		}								\
 } while (0)
 #ifdef WL_SCAN
@@ -95,8 +95,8 @@ do {										\
 #define	WL_SCAN(args)								\
 do {									\
 	if (wl_dbg_level & WL_DBG_SCAN) {			\
-		printf(KERN_ERR "CFG80211-SCAN) %s :", __func__);	\
-		printf args;							\
+		printk(KERN_ERR "CFG80211-SCAN) %s :", __func__);	\
+		printk args;							\
 	}									\
 } while (0)
 #ifdef WL_TRACE
@@ -105,16 +105,16 @@ do {									\
 #define	WL_TRACE(args)								\
 do {									\
 	if (wl_dbg_level & WL_DBG_TRACE) {			\
-		printf(KERN_ERR "CFG80211-TRACE) %s :", __func__);	\
-		printf args;							\
+		printk(KERN_ERR "CFG80211-TRACE) %s :", __func__);	\
+		printk args;							\
 	}									\
 } while (0)
 #if (WL_DBG_LEVEL > 0)
 #define	WL_DBG(args)								\
 do {									\
 	if (wl_dbg_level & WL_DBG_DBG) {			\
-		printf(KERN_ERR "CFG80211-DEBUG) %s :", __func__);	\
-		printf args;							\
+		printk(KERN_ERR "CFG80211-DEBUG) %s :", __func__);	\
+		printk args;							\
 	}									\
 } while (0)
 #else				/* !(WL_DBG_LEVEL > 0) */
@@ -153,8 +153,6 @@ do {									\
 #define WL_SCB_TIMEOUT 20
 #endif
 
-#define WLAN_REASON_DRIVER_ERROR 	WLAN_REASON_UNSPECIFIED
-
 /* driver status */
 enum wl_status {
 	WL_STATUS_READY = 0,
@@ -183,7 +181,6 @@ enum wl_prof_list {
 	WL_PROF_IBSS,
 	WL_PROF_BAND,
 	WL_PROF_BSSID,
-	WL_PROF_PENDING_BSSID,
 	WL_PROF_ACT,
 	WL_PROF_BEACONINT,
 	WL_PROF_DTIMPERIOD
@@ -286,7 +283,6 @@ struct wl_profile {
 	struct wl_security sec;
 	struct wl_ibss ibss;
 	u8 bssid[ETHER_ADDR_LEN];
-	u8 pending_bssid[ETHER_ADDR_LEN];
 	u16 beacon_interval;
 	u8 dtim_period;
 	bool active;
@@ -688,6 +684,4 @@ int wl_cfg80211_do_driver_init(struct net_device *net);
 void wl_cfg80211_enable_trace(int level);
 extern s32 wl_update_wiphybands(struct wl_priv *wl);
 extern s32 wl_cfg80211_if_is_group_owner(void);
-extern int wl_cfg80211_update_power_mode(struct net_device *dev);
-extern s32 wl_add_remove_eventmsg(struct net_device *ndev, u16 event, bool add);
 #endif				/* _wl_cfg80211_h_ */

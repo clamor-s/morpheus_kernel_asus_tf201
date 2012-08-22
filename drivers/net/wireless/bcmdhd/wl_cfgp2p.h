@@ -123,22 +123,22 @@ enum wl_cfgp2p_status {
 #define CFGP2P_ERR(args)									\
 	do {										\
 		if (wl_dbg_level & WL_DBG_ERR) {				\
-			printf(KERN_ERR "CFGP2P-ERROR) %s : ", __func__);	\
-			printf args;						\
+			printk(KERN_ERR "CFGP2P-ERROR) %s : ", __func__);	\
+			printk args;						\
 		}									\
 	} while (0)
 #define	CFGP2P_INFO(args)									\
 	do {										\
 		if (wl_dbg_level & WL_DBG_INFO) {				\
-			printf(KERN_ERR "CFGP2P-INFO) %s : ", __func__);	\
-			printf args;						\
+			printk(KERN_ERR "CFGP2P-INFO) %s : ", __func__);	\
+			printk args;						\
 		}									\
 	} while (0)
 #define	CFGP2P_DBG(args)								\
 	do {									\
 		if (wl_dbg_level & WL_DBG_DBG) {			\
-			printf(KERN_ERR "CFGP2P-DEBUG) %s :", __func__);	\
-			printf args;							\
+			printk(KERN_ERR "CFGP2P-DEBUG) %s :", __func__);	\
+			printk args;							\
 		}									\
 	} while (0)
 
