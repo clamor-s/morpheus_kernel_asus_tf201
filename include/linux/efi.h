@@ -36,6 +36,9 @@ typedef unsigned long efi_status_t;
 typedef u8 efi_bool_t;
 typedef u16 efi_char16_t;		/* UNICODE character */
 
+#ifdef CONFIG_TEGRA_BOOTBLOCK_EXPOSE
+extern int tegra_bootblock_offset;
+#endif
 
 typedef struct {
 	u8 b[16];
