@@ -140,16 +140,15 @@ static int ieee80211_add_key(struct wiphy *wiphy, struct net_device *dev,
 			sta = sta_info_get(sdata, mac_addr);
 		else
 			sta = sta_info_get_bss(sdata, mac_addr);
+
 		if (!sta) {
-			ieee80211_key_free(sdata->local, key);
+			ieee80211_key_free_unused(key);
 			err = -ENOENT;
 			goto out_unlock;
 		}
 	}
 
 	err = ieee80211_key_link(key, sdata, sta);
-	if (err)
-		ieee80211_key_free(sdata->local, key);
 
  out_unlock:
 	mutex_unlock(&sdata->local->sta_mtx);
