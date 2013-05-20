@@ -10,6 +10,7 @@
 #include <linux/pid_namespace.h>
 #include <linux/user_namespace.h>
 #include <linux/securebits.h>
+#include <linux/rbtree.h>
 #include <net/net_namespace.h>
 
 #ifdef CONFIG_SMP
@@ -126,6 +127,14 @@ extern struct cred init_cred;
 # define INIT_PERF_EVENTS(tsk)
 #endif
 
+#ifdef CONFIG_RT_MUTEXES
+# define INIT_RT_MUTEXES(tsk)						\
+	.pi_waiters = RB_ROOT,						\
+	.pi_waiters_leftmost = NULL,
+#else
+# define INIT_RT_MUTEXES(tsk)
+#endif
+
 /*
  *  INIT_TASK is used to set up the first task table, touch at
  * your own risk!. Base=0, limit=0x1fffff (=2MB)
@@ -192,6 +201,7 @@ extern struct cred init_cred;
 	INIT_FTRACE_GRAPH						\
 	INIT_TRACE_RECURSION						\
 	INIT_TASK_RCU_PREEMPT(tsk)					\
+	INIT_RT_MUTEXES(tsk)						\
 }
 
 
