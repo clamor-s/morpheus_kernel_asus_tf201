@@ -198,8 +198,6 @@ static struct tegra_thermal_data thermal_data = {
 };
 
 
-#ifdef CONFIG_BT_BLUESLEEP
-
 static struct resource cardhu_bcm4329_rfkill_resources[] = {
 	{
 		.name   = "bcm4329_nshutdown_gpio",
@@ -249,52 +247,8 @@ static noinline void __init cardhu_setup_bluesleep(void)
 {
 	platform_device_register(&cardhu_bluesleep_device);
 	bluesleep_setup_uart_port(&tegra_uartc_device);
-	tegra_gpio_enable(TEGRA_GPIO_PU6);
-	tegra_gpio_enable(TEGRA_GPIO_PU1);
 	return;
 }
-#elif defined CONFIG_BLUEDROID_PM
-static struct resource cardhu_bluedroid_pm_resources[] = {
-	[0] = {
-		.name   = "shutdown_gpio",
-		.start  = TEGRA_GPIO_PU0,
-		.end    = TEGRA_GPIO_PU0,
-		.flags  = IORESOURCE_IO,
-	},
-	[1] = {
-		.name = "host_wake",
-		.flags  = IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
-	},
-	[2] = {
-		.name = "gpio_ext_wake",
-		.start  = TEGRA_GPIO_PU1,
-		.end    = TEGRA_GPIO_PU1,
-		.flags  = IORESOURCE_IO,
-	},
-	[3] = {
-		.name = "gpio_host_wake",
-		.start  = TEGRA_GPIO_PU6,
-		.end    = TEGRA_GPIO_PU6,
-		.flags  = IORESOURCE_IO,
-	},
-};
-
-static struct platform_device cardhu_bluedroid_pm_device = {
-	.name = "bluedroid_pm",
-	.id             = 0,
-	.num_resources  = ARRAY_SIZE(cardhu_bluedroid_pm_resources),
-	.resource       = cardhu_bluedroid_pm_resources,
-};
-
-static noinline void __init cardhu_setup_bluedroid_pm(void)
-{
-	cardhu_bluedroid_pm_resources[1].start =
-		cardhu_bluedroid_pm_resources[1].end =
-				gpio_to_irq(TEGRA_GPIO_PU6);
-	platform_device_register(&cardhu_bluedroid_pm_device);
-	return;
-}
-#endif
 
 static __initdata struct tegra_clk_init_table cardhu_clk_init_table[] = {
 	/* name		parent		rate		enabled */
