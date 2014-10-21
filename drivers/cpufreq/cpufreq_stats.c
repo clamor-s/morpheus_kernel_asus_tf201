@@ -72,19 +72,19 @@ struct cpufreq_stats_attribute {
 static int cpufreq_stats_update(unsigned int cpu)
 {
 	struct cpufreq_stats *stat;
-    struct all_cpufreq_stats *all_stat;
+	struct all_cpufreq_stats *all_stat;
 	unsigned long long cur_time;
 
 	cur_time = get_jiffies_64();
 	spin_lock(&cpufreq_stats_lock);
 	stat = per_cpu(cpufreq_stats_table, cpu);
+	all_stat = per_cpu(all_cpufreq_stats, cpu);
 	if (!stat) {
 		spin_unlock(&cpufreq_stats_lock);
 		return 0;
 	}
 
-	all_stat = per_cpu(all_cpufreq_stats, cpu);
-	if (stat->time_in_state && stat->last_index >= 0)
+	if (stat->time_in_state && stat->last_index >= 0) {
 		stat->time_in_state[stat->last_index] =
 			cputime64_add(stat->time_in_state[stat->last_index],
 				      cputime_sub(cur_time, stat->last_time));
@@ -326,19 +326,19 @@ static void cpufreq_stats_free_sysfs(unsigned int cpu)
 
 static void cpufreq_allstats_free(void)
 {
-	int i;
+	int cpu;
 	struct all_cpufreq_stats *all_stat;
 
 	sysfs_remove_file(cpufreq_global_kobject,
 						&_attr_all_time_in_state.attr);
 
-	for (i = 0; i < total_cpus; i++) {
-		all_stat = per_cpu(all_cpufreq_stats, i);
+	for_each_possible_cpu(cpu) {
+		all_stat = per_cpu(all_cpufreq_stats, cpu);
 		if (!all_stat)
 			continue;
 		kfree(all_stat->time_in_state);
 		kfree(all_stat);
-		per_cpu(all_cpufreq_stats, i) = NULL;
+		per_cpu(all_cpufreq_stats, cpu) = NULL;
 	}
 	if (all_freq_table) {
 		kfree(all_freq_table->freq_table);
