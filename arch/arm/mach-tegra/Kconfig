@@ -17,12 +17,12 @@ if ARCH_TEGRA
 comment "NVIDIA Tegra options"
 
 config TF300T_OC
-	bool "Enable higher CPU, GPU clock rates on TF300T"
+	bool "Enable higher CPU clock rates on TF300T"
 	depends on TEGRA_EDP_LIMITS
 	default n
 	help
 	  Tegra T30 part reported as Tegra T33 allowing CPU clock
-	  up to 1.7Ghz and GPU clock up to 520Mhz
+	  up to 1.7Ghz
 
 config ARCH_TEGRA_2x_SOC
 	bool "Tegra 2 family SOC"
@@ -371,7 +371,12 @@ config VOLTAGE_CONTROL
 	help
 	User custom voltage control interface
 
-
+config GPU_OVERCLOCK
+	bool "Enable GPU overclock for Tegra3"
+	depends on TEGRA_SILICON_PLATFORM
+	default n
+	help
+	Choose y to overclock the GPU
 
 config TEGRA_CPU_DVFS
 	bool "Enable voltage scaling on Tegra CPU"
