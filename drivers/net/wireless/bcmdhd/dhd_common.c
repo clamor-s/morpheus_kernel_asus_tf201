@@ -201,7 +201,6 @@ dhd_common_init(osl_t *osh)
 #ifdef SOFTAP
 	fw_path2[0] = '\0';
 #endif
-	DHD_ERROR(("bcmdhd: fw_path: %s nvram_path: %s\n", fw_path, nv_path));
 	return cmn;
 }
 
