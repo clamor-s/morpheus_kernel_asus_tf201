@@ -1842,6 +1842,9 @@ void process_T9_message(u8 *message, struct mxt_data *mxt, int last_touch)
 			if (mxt->max_y_val < 1024)
 				ypos >>= 2;
 
+#ifdef CONFIG_TOUCHSCREEN_REVERTION
+				xpos = mxt->max_x_val - xpos;
+#endif
 			stored_x[touch_number] = xpos;
 			stored_y[touch_number] = ypos;
 			fingerInfo[touch_number].x=xpos;
