@@ -790,5 +790,9 @@ config TOUCHSCREEN_SIS_I2C
 	help
 	  This enables support for SiS 9200 family over I2C based touchscreens.
 
-
+config TOUCHSCREEN_REVERTION
+	bool "Reverts x axis on non-original touchscreens"
+	default n
+	help
+	  For Hannstouch Screens with the reverse axis.
 endif

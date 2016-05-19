@@ -152,7 +152,6 @@ u8 ver_minor;
 u32 cfg_crc;
 static int debug = NO_DEBUG;
 static int comms;
-static int reverse_axis = 0;
 static unsigned int resume_flag;
 static bool delta_flag; 
 static bool cfg_flag;
@@ -172,11 +171,9 @@ static const  u32 touch_panel_config_checksum[2][4] = {
 
 module_param(debug, int, 0644);
 module_param(comms, int, 0644);
-module_param(reverse_axis, int, 0644);
 
 MODULE_PARM_DESC(debug, "Activate debugging output");
 MODULE_PARM_DESC(comms, "Select communications mode");
-MODULE_PARM_DESC(reverse_axis, "For Hannstouch Screens with the reverse axis");
 static int d_flag=0;
 
 /* Mapping from report id to object type and instance */
@@ -1852,9 +1849,9 @@ void process_T9_message(u8 *message, struct mxt_data *mxt, int last_touch)
 			if (mxt->max_y_val < 1024)
 				ypos >>= 2;
 
-			if (reverse_axis == 1)
+#ifdef CONFIG_TOUCHSCREEN_REVERTION
 				xpos = mxt->max_x_val - xpos;
-			else (reverse_axis == 0);
+#endif
 			stored_x[touch_number] = xpos;
 			stored_y[touch_number] = ypos;
 			fingerInfo[touch_number].x=xpos;
