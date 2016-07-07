@@ -46,7 +46,7 @@ static struct dvfs *cpu_dvfs;
 
 static int cpu_millivolts[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
 
-static const int cpu_millivolts_aged[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
+static int cpu_millivolts_aged[MAX_DVFS_FREQS] = CPU_MILLIVOLTS;
 
 static const unsigned int cpu_cold_offs_mhz[MAX_DVFS_FREQS] = {
 	 50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,  50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50,   50, 50};
