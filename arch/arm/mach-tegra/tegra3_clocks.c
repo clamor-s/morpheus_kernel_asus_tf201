@@ -5021,7 +5021,6 @@ struct tegra_cpufreq_table_data *tegra_cpufreq_table_get(void)
 				ret = clip_cpu_rate_limits(
 					&cpufreq_tables[i],
 					&policy, cpu_clk_g, cpu_clk_lp);
-				printk("tegra3_clocks: clip_cpu_rate_limits return code: %u\n", ret);
 				if (!ret)
 					return &cpufreq_tables[i];
 			}
