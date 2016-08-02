@@ -165,7 +165,7 @@ static struct regulator_consumer_supply tps6591x_ldo8_supply_0[] = {
 };
 
 #define TPS_PDATA_INIT(_name, _sname, _minmv, _maxmv, _supply_reg, _always_on, \
-	_boot_on, _apply_uv, _init_uV, _init_enable, _init_apply, _ectrl, _flags) \
+	_boot_on, _apply_uv, _init_uV, _init_enable, _init_apply, _ectrl, _flags, _off) \
 	static struct tps6591x_regulator_platform_data pdata_##_name##_##_sname = \
 	{								\
 		.regulator = {						\
@@ -191,26 +191,27 @@ static struct regulator_consumer_supply tps6591x_ldo8_supply_0[] = {
 		.init_apply = _init_apply,				\
 		.ectrl = _ectrl,					\
 		.flags = _flags,					\
+		.shutdown_state_off = _off,				\
 	}
 
-TPS_PDATA_INIT(vdd1, skubit0_0, 600,  1500, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, 0);
-TPS_PDATA_INIT(vdd1, skubit0_1, 600,  1500, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, 0);
-TPS_PDATA_INIT(vdd2, 0,         600,  1500, 0, 1, 1, 0, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(vddctrl, 0,      600,  1400, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_EN1, 0);
-TPS_PDATA_INIT(vio,  0,         1500, 3300, 0, 1, 1, 0, -1, 0, 0, 0, 0);
+TPS_PDATA_INIT(vdd1, skubit0_0, 600,  1500, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, 0, true);
+TPS_PDATA_INIT(vdd1, skubit0_1, 600,  1500, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, 0, true);
+TPS_PDATA_INIT(vdd2, 0,         600,  1500, 0, 1, 1, 0, -1, 0, 0, 0, 0, false);
+TPS_PDATA_INIT(vddctrl, 0,      600,  1400, 0, 1, 1, 0, -1, 0, 0, EXT_CTRL_EN1, 0, true);
+TPS_PDATA_INIT(vio,  0,         1500, 3300, 0, 1, 1, 0, -1, 0, 0, 0, 0, false);
 
-TPS_PDATA_INIT(ldo1, 0,         1000, 3300, tps6591x_rails(VDD_2), 1, 0, 0, -1, 1, 1, 0, 0);
-TPS_PDATA_INIT(ldo2, 0,         1050, 3300, tps6591x_rails(VDD_2), 0, 0, 1, -1, 0, 1, 0, 0);
+TPS_PDATA_INIT(ldo1, 0,         1000, 3300, tps6591x_rails(VDD_2), 1, 0, 0, -1, 1, 1, 0, 0, true);
+TPS_PDATA_INIT(ldo2, 0,         1050, 3300, tps6591x_rails(VDD_2), 0, 0, 1, -1, 0, 1, 0, 0, false);
 
-TPS_PDATA_INIT(ldo3, e118x,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(ldo3, e1198,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(ldo4, 0,         1000, 3300, 0, 1, 0, 0, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(ldo5, e118x,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(ldo5, e1198,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0);
+TPS_PDATA_INIT(ldo3, e118x,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0, true);
+TPS_PDATA_INIT(ldo3, e1198,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0, true);
+TPS_PDATA_INIT(ldo4, 0,         1000, 3300, 0, 1, 0, 0, -1, 0, 0, 0, 0, false);
+TPS_PDATA_INIT(ldo5, e118x,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0, true);
+TPS_PDATA_INIT(ldo5, e1198,     1000, 3300, 0, 0, 0, 0, -1, 0, 0, 0, 0, true );
 
-TPS_PDATA_INIT(ldo6, 0,         1200, 1200, tps6591x_rails(VIO), 0, 0, 1, -1, 0, 0, 0, 0);
-TPS_PDATA_INIT(ldo7, 0,         1200, 1200, tps6591x_rails(VIO), 1, 1, 1, -1, 0, 0, EXT_CTRL_SLEEP_OFF, LDO_LOW_POWER_ON_SUSPEND);
-TPS_PDATA_INIT(ldo8, 0,         1000, 3300, tps6591x_rails(VIO), 1, 0, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, LDO_LOW_POWER_ON_SUSPEND);
+TPS_PDATA_INIT(ldo6, 0,         1200, 1200, tps6591x_rails(VIO), 0, 0, 1, -1, 0, 0, 0, 0, true);
+TPS_PDATA_INIT(ldo7, 0,         1200, 1200, tps6591x_rails(VIO), 1, 1, 1, -1, 0, 0, EXT_CTRL_SLEEP_OFF, LDO_LOW_POWER_ON_SUSPEND, false);
+TPS_PDATA_INIT(ldo8, 0,         1000, 3300, tps6591x_rails(VIO), 1, 0, 0, -1, 0, 0, EXT_CTRL_SLEEP_OFF, LDO_LOW_POWER_ON_SUSPEND, false);
 
 #if defined(CONFIG_RTC_DRV_TPS6591x)
 static struct tps6591x_rtc_platform_data rtc_data = {
@@ -1329,33 +1330,4 @@ void tegra_booting_info(void )
 		boot_reason=0;
 		printk("tegra_booting_info-normal\n");
 	}
-}
-
-int cpufreq_stats_platform_cpu_power_read_tables(int cpunum, u32 *out_values, size_t num)
-{
-	static const u32 powerVals[] = {100000, 107000, 116000, 123000, 135000, 138000, 142000, 148000, 150000, 153000, 156000, 160000, 163000, 166000, 170000};
-	static const u32 cpuWeights[4] = {16384, 6717, 7700, 8847};
-	int i, numVals = sizeof(powerVals) / sizeof(*powerVals), numCpus = sizeof(cpuWeights) / sizeof(*cpuWeights);
-
-	/*
-	 * Our data source (power_profile.xml) only gives us values for 1st core,
-	 * and not per core as requested, so we weigh these. With weights: 100%, 54%.
-    	 * This is the same thing as what hammerhead does (for 1st and last core), for
-	 * better or worse.
-	 */
-
-	if (num > numVals) {
-		pr_err("cpufreq_stats_platform_cpu_power_read_tables asked for too many values (wanted %u have %u)\n", (int)num, numVals);
-		return -1;
-	}
-
-	if (cpunum > numCpus) {
-		pr_err("cpufreq_stats_platform_cpu_power_read_tables asked for too many CPUs (wanted %u have %u)\n", cpunum, numCpus);
-		return -2;
-	}
-
-	for (i = 0; i < num; i++)
-		*out_values++ = powerVals[i] * cpuWeights[cpunum] >> 14;
-
-	return 0;
 }
