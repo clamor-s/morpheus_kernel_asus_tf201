@@ -197,21 +197,21 @@ static struct tegra_thermal_data thermal_data = {
 #endif
 };
 
-
-static struct resource cardhu_bcm4329_rfkill_resources[] = {
+#ifdef CONFIG_BT_BLUESLEEP
+static struct resource cardhu_bcm4330_rfkill_resources[] = {
 	{
-		.name   = "bcm4329_nshutdown_gpio",
+		.name   = "bcm4330_nshutdown_gpio",
 		.start  = TEGRA_GPIO_PU0,
 		.end    = TEGRA_GPIO_PU0,
 		.flags  = IORESOURCE_IO,
 	},
 };
 
-static struct platform_device cardhu_bcm4329_rfkill_device = {
-	.name = "bcm4329_rfkill",
+static struct platform_device cardhu_bcm4330_rfkill_device = {
+	.name           = "bcm4330_rfkill",
 	.id             = -1,
-	.num_resources  = ARRAY_SIZE(cardhu_bcm4329_rfkill_resources),
-	.resource       = cardhu_bcm4329_rfkill_resources,
+	.num_resources  = ARRAY_SIZE(cardhu_bcm4330_rfkill_resources),
+	.resource       = cardhu_bcm4330_rfkill_resources,
 };
 
 static struct resource cardhu_bluesleep_resources[] = {
@@ -245,10 +245,54 @@ static struct platform_device cardhu_bluesleep_device = {
 extern void bluesleep_setup_uart_port(struct platform_device *uart_dev);
 static noinline void __init cardhu_setup_bluesleep(void)
 {
-	platform_device_register(&cardhu_bluesleep_device);
-	bluesleep_setup_uart_port(&tegra_uartc_device);
+        platform_device_register(&cardhu_bluesleep_device);
+        bluesleep_setup_uart_port(&tegra_uartc_device);
+        tegra_gpio_enable(TEGRA_GPIO_PU6);
+        tegra_gpio_enable(TEGRA_GPIO_PU1);
+        return;
+}
+#elif defined CONFIG_BLUEDROID_PM
+static struct resource cardhu_bluedroid_pm_resources[] = {
+	[0] = {
+		.name   = "shutdown_gpio",
+		.start  = TEGRA_GPIO_PU0,
+		.end    = TEGRA_GPIO_PU0,
+		.flags  = IORESOURCE_IO,
+	},
+	[1] = {
+		.name = "host_wake",
+		.flags  = IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
+	},
+	[2] = {
+		.name = "gpio_ext_wake",
+		.start  = TEGRA_GPIO_PU1,
+		.end    = TEGRA_GPIO_PU1,
+		.flags  = IORESOURCE_IO,
+	},
+	[3] = {
+		.name = "gpio_host_wake",
+		.start  = TEGRA_GPIO_PU6,
+		.end    = TEGRA_GPIO_PU6,
+		.flags  = IORESOURCE_IO,
+	},
+};
+
+static struct platform_device cardhu_bluedroid_pm_device = {
+	.name = "bluedroid_pm",
+	.id             = 0,
+	.num_resources  = ARRAY_SIZE(cardhu_bluedroid_pm_resources),
+	.resource       = cardhu_bluedroid_pm_resources,
+};
+
+static noinline void __init cardhu_setup_bluedroid_pm(void)
+{
+	cardhu_bluedroid_pm_resources[1].start =
+		cardhu_bluedroid_pm_resources[1].end =
+				gpio_to_irq(TEGRA_GPIO_PU6);
+	platform_device_register(&cardhu_bluedroid_pm_device);
 	return;
 }
+#endif
 
 static __initdata struct tegra_clk_init_table cardhu_clk_init_table[] = {
 	/* name		parent		rate		enabled */
@@ -942,7 +986,7 @@ static struct platform_device *cardhu_devices[] __initdata = {
 	&bluetooth_dit_device,
 	&baseband_dit_device,
 #ifdef CONFIG_BT_BLUESLEEP
-	&cardhu_bcm4329_rfkill_device,
+	&cardhu_bcm4330_rfkill_device,
 #endif
 	&tegra_pcm_device,
 	&cardhu_audio_device,
@@ -1167,23 +1211,19 @@ static int __init cardhu_touch_init(void)
         /*
 	if (DisplayBoardInfo.board_id == BOARD_DISPLAY_PM313) {
 		tegra_clk_init_from_table(spi_clk_init_table);
-
 		touch_init_raydium(TEGRA_GPIO_PH4, TEGRA_GPIO_PH6, 2);
 	} else {
 		gpio_request(TEGRA_GPIO_PH4, "atmel-irq");
 		gpio_direction_input(TEGRA_GPIO_PH4);
-
 		gpio_request(TEGRA_GPIO_PH6, "atmel-reset");
 		gpio_direction_output(TEGRA_GPIO_PH6, 0);
 		msleep(1);
 		gpio_set_value(TEGRA_GPIO_PH6, 1);
 		msleep(100);
-
 		if ((BoardInfo.sku & SKU_TOUCH_MASK) == SKU_TOUCH_2000) {
 			atmel_mxt_info.config = config_sku2000;
 			atmel_mxt_info.config_crc = MXT_CONFIG_CRC_SKU2000;
 		}
-
 		if (DisplayBoardInfo.board_id == BOARD_DISPLAY_E1506)
 			i2c_register_board_info(1, e1506_atmel_i2c_info, 1);
 		else
