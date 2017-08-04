@@ -1,6 +1,6 @@
 /*
 * Customer code to add GPIO control during WLAN start/stop
-* Copyright (C) 1999-2012, Broadcom Corporation
+* Copyright (C) 1999-2013, Broadcom Corporation
 * 
 *      Unless you and Broadcom execute a separate written software license
 * agreement governing use of this software, this software is licensed to you
@@ -20,7 +20,7 @@
 * software in any way with any other Broadcom software provided under a license
 * other than the GPL, without Broadcom's express prior written consent.
 *
-* $Id: dhd_custom_gpio.c 345514 2012-07-18 07:47:36Z $
+* $Id: dhd_custom_gpio.c 353280 2012-08-26 04:33:17Z $
 */
 
 #include <typedefs.h>
@@ -53,7 +53,7 @@ int wifi_get_irq_number(unsigned long *irq_flags_ptr) { return -1; }
 int wifi_get_mac_addr(unsigned char *buf) { return -1; }
 void *wifi_get_country_code(char *ccode) { return NULL; }
 #endif /* CONFIG_WIFI_CONTROL_FUNC */
-#endif /* CUSTOMER_HW2 */
+#endif 
 
 #if defined(OOB_INTR_ONLY)
 
@@ -112,11 +112,11 @@ int dhd_customer_oob_irq_map(unsigned long *irq_flags_ptr)
 	host_oob_irq = gpio_to_irq(dhd_oob_gpio_num);
 	gpio_direction_input(dhd_oob_gpio_num);
 #endif /* CUSTOMER_HW */
-#endif /* CUSTOMER_HW2 */
+#endif 
 
 	return (host_oob_irq);
 }
-#endif /* defined(OOB_INTR_ONLY) */
+#endif 
 
 /* Customer function to control hw specific wlan gpios */
 void
@@ -196,7 +196,7 @@ dhd_custom_get_mac_address(unsigned char *buf)
 #endif /* GET_CUSTOM_MAC_ENABLE */
 
 /* Customized Locale table : OPTIONAL feature */
-#define BCM4334_CHIP	1
+#define BCM4334_CHIP 1
 const struct cntry_locales_custom translate_custom_table[] = {
 /* Table should be filled out based on custom platform regulatory requirement */
 #ifdef EXAMPLE_TABLE
@@ -294,14 +294,14 @@ const struct cntry_locales_custom translate_custom_table[] = {
 	{"TR", "TR", 7},
 	{"TW", "TW", 0},
 #ifdef CUSTOMER_HW2
-	{"IR", "XZ", 11},	/* Universal if Country code is IRAN, (ISLAMIC REPUBLIC OF) */
-	{"SD", "XZ", 11},	/* Universal if Country code is SUDAN */
-	{"SY", "XZ", 11},	/* Universal if Country code is SYRIAN ARAB REPUBLIC */
-	{"GL", "XZ", 11},	/* Universal if Country code is GREENLAND */
-	{"PS", "XZ", 11},	/* Universal if Country code is PALESTINIAN TERRITORY, OCCUPIED */
-	{"TL", "XZ", 11},	/* Universal if Country code is TIMOR-LESTE (EAST TIMOR) */
-	{"MH", "XZ", 11},	/* Universal if Country code is MARSHALL ISLANDS */
-	{"PK", "XZ", 11},	/* Universal if Country code is PAKISTAN */
+	{"IR", "XZ", 11},       /* Universal if Country code is IRAN, (ISLAMIC REPUBLIC OF) */
+	{"SD", "XZ", 11},       /* Universal if Country code is SUDAN */
+	{"SY", "XZ", 11},       /* Universal if Country code is SYRIAN ARAB REPUBLIC */
+	{"GL", "XZ", 11},       /* Universal if Country code is GREENLAND */
+	{"PS", "XZ", 11},       /* Universal if Country code is PALESTINIAN TERRITORY, OCCUPIED */
+	{"TL", "XZ", 11},       /* Universal if Country code is TIMOR-LESTE (EAST TIMOR) */
+	{"MH", "XZ", 11},       /* Universal if Country code is MARSHALL ISLANDS */
+	{"PK", "XZ", 11},       /* Universal if Country code is PAKISTAN */
 #endif
 #ifdef BCM4334_CHIP
 	{"RU", "RU", 5},
