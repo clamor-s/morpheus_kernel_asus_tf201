@@ -31,6 +31,8 @@
 #include <linux/syscore_ops.h>
 #include <linux/pm_qos_params.h>
 
+#include "../../arch/arm/mach-tegra/dvfs.h"
+
 #include <trace/events/power.h>
 
 /**
@@ -69,7 +71,7 @@ static DEFINE_PER_CPU(int, cpufreq_policy_cpu);
 static DEFINE_PER_CPU(struct rw_semaphore, cpu_policy_rwsem);
 
 #define lock_policy_rwsem(mode, cpu)					\
-static int lock_policy_rwsem_##mode					\
+int lock_policy_rwsem_##mode					\
 (int cpu)								\
 {									\
 	int policy_cpu = per_cpu(cpufreq_policy_cpu, cpu);		\
@@ -87,14 +89,14 @@ lock_policy_rwsem(read, cpu);
 
 lock_policy_rwsem(write, cpu);
 
-static void unlock_policy_rwsem_read(int cpu)
+void unlock_policy_rwsem_read(int cpu)
 {
 	int policy_cpu = per_cpu(cpufreq_policy_cpu, cpu);
 	BUG_ON(policy_cpu == -1);
 	up_read(&per_cpu(cpu_policy_rwsem, policy_cpu));
 }
 
-static void unlock_policy_rwsem_write(int cpu)
+void unlock_policy_rwsem_write(int cpu)
 {
 	int policy_cpu = per_cpu(cpufreq_policy_cpu, cpu);
 	BUG_ON(policy_cpu == -1);
@@ -649,7 +651,7 @@ static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf, size_
 			pr_info("user mv tbl[%i]: %lu\n", i, volt_cur);
 
 			/* Non-standard sysfs interface: advance buf */
-			ret = sscanf(buf, "%15s", size_cur);
+			ret = sscanf(buf, "%s", size_cur);
 			buf += (strlen(size_cur)+1);
 		}
 	}
@@ -659,7 +661,6 @@ static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf, size_
 	return count;
 }
 #endif
-
 
 cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
 cpufreq_freq_attr_ro(cpuinfo_min_freq);
@@ -682,7 +683,6 @@ cpufreq_freq_attr_rw(dvfs_test);
 cpufreq_freq_attr_rw(UV_mV_table);
 #endif
 
-
 static struct attribute *default_attrs[] = {
 	&cpuinfo_min_freq.attr,
 	&cpuinfo_max_freq.attr,
@@ -701,7 +701,7 @@ static struct attribute *default_attrs[] = {
 #ifdef CONFIG_VOLTAGE_CONTROL
 	&UV_mV_table.attr,
 #endif
-
+	
 	NULL
 };
 
