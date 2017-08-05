@@ -1526,6 +1526,8 @@ const struct mxt_object* get_object(uint8_t object_type,
 static int mxt_read_block(struct i2c_client *client,
 			  u16 addr, u16 length, u8 *value)
 {
+#define SYNAPTICS_I2C_RETRY 10
+	int retry = 0;
 	struct i2c_adapter *adapter = client->adapter;
 	struct i2c_msg msg[2];
 	__le16 le_addr;
@@ -1558,11 +1560,16 @@ static int mxt_read_block(struct i2c_client *client,
 	msg[1].flags = I2C_M_RD;
 	msg[1].len = length;
 	msg[1].buf = (u8 *) value;
-	if (i2c_transfer(adapter, msg, 2) == 2)
-		return length;
-	else
-		return -EIO;
 
+	for (retry = 0; retry <= SYNAPTICS_I2C_RETRY; retry++) {
+		if (i2c_transfer(adapter, msg, 2) == 2)
+			return length;
+		else
+			if (retry == SYNAPTICS_I2C_RETRY)
+				return -EIO;
+			else
+				msleep(10);
+	}
 }
 
 /* Reads a block of bytes from current address from mXT chip. */
