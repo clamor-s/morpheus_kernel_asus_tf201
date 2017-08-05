@@ -102,7 +102,11 @@ static const u32 cpu_process_speedos[][CPU_PROCESS_CORNERS_NUM] = {
 
 /* T33 family */
 	{295, 336, 358, 375, UINT_MAX},      /* [7]: cpu_speedo_id: 4: AP33 */
+#ifdef CONFIG_TF300T_OC
+	{295, 336, 358, 375, 391, UINT_MAX}, /* [10]: cpu_speedo_id: 7: T30L */
+#else		
 	{358, 358, 358, 358, 397, UINT_MAX}, /* [8]: cpu_speedo_id: 5: T33  */
+#endif	
 	{364, 364, 364, 364, 397, UINT_MAX}, /* [9]: cpu_speedo_id: 6/12: T33S/AP37 */
 
 /* T30 'L' family */
@@ -217,13 +221,16 @@ static void rev_sku_to_speedo_ids(int rev, int sku)
 				break;
 			}
 			break;
-
+			
+#ifdef CONFIG_TF300T_OC
+		case 0x83: /* T30L or T30S */
+#endif	
 		case 0x80: /* T33 or T33S */
 			switch (package_id) {
 			case 1: /* MID => T33 */
-				cpu_speedo_id = 12;
+				cpu_speedo_id = 5;
 				soc_speedo_id = 2;
-				threshold_index = 9;
+				threshold_index = 8;
 				break;
 			case 2: /* DSC => T33S */
 				cpu_speedo_id = 6;
@@ -237,7 +244,7 @@ static void rev_sku_to_speedo_ids(int rev, int sku)
 				break;
 			}
 			break;
-
+#ifndef CONFIG_TF300T_OC
 		case 0x83: /* T30L or T30S */
 			switch (package_id) {
 			case 1: /* MID => T30L */
@@ -257,7 +264,7 @@ static void rev_sku_to_speedo_ids(int rev, int sku)
 				break;
 			}
 			break;
-
+#endif
 		case 0x8F: /* T30SL */
 			cpu_speedo_id = 8;
 			soc_speedo_id = 1;
@@ -554,7 +561,7 @@ int tegra_package_id(void)
  */
 static const int cpu_speedo_nominal_millivolts[] =
 /* speedo_id 0,    1,    2,    3,    4,    5,    6,    7,    8,   9,  10,  11,   12,    13,  14,  15 */
-	{ 1125, 1350, 1350, 1350, 1237, 1350, 1237, 1350, 1150, 1007, 916, 850, 1350,  1350, 950, 900};
+	{ 1125, 1237, 1237, 1237, 1237, 1237, 1237, 1237, 1150, 1007, 916, 850, 1237, 1237, 950, 900};
 
 int tegra_cpu_speedo_mv(void)
 {
@@ -566,18 +573,18 @@ int tegra_core_speedo_mv(void)
 {
 	switch (soc_speedo_id) {
 	case 0:
-		return 1350;
+		return 1250;
 	case 1:
 		if ((cpu_speedo_id != 7) && (cpu_speedo_id != 8))
-			return 1350;
+			return 1250;
 		/* fall thru for T30L or T30SL */
 	case 2:
 		if (cpu_speedo_id != 13)
-			return 1350;
+			return 1300;
 		/* T37 */
 		return 1350;
 	case 3:
-		return 1350;
+		return 1250;
 	default:
 		BUG();
 	}

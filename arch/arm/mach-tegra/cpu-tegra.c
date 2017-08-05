@@ -47,13 +47,17 @@
 #include "pm.h"
 
 #include <linux/seq_file.h>
-
+/*
 #define SYSTEM_NORMAL_MODE	(0)
 #define SYSTEM_BALANCE_MODE	(1)
 #define SYSTEM_PWRSAVE_MODE	(2)
 #define SYSTEM_MODE_END 		(SYSTEM_PWRSAVE_MODE + 1)
 #define SYSTEM_PWRSAVE_MODE_MAX_FREQ	(1000000)
+#ifdef CONFIG_TF300T_OC
+unsigned int power_mode_table[SYSTEM_MODE_END] = {1000000,1200000,2000000};
+#else
 unsigned int power_mode_table[SYSTEM_MODE_END] = {1000000,1200000,1400000};
+*/
 
 // overclocking
 static int override_edp = 0;
@@ -115,7 +119,9 @@ static DEFINE_MUTEX(tegra_cpu_lock);
 static bool is_suspended;
 static int suspend_index;
 static bool force_policy_max;
- int  gps_enable=0;
+
+
+int  gps_enable=0;
 
 static bool camera_enable = 0;
 static unsigned long camera_enable_cpu_emc_mini_rate = 0;
@@ -486,7 +492,7 @@ static unsigned int edp_predict_limit(unsigned int cpus)
 	if (override_edp && cpu_edp_limits[edp_thermal_index].temperature > 25 && cpu_edp_limits[edp_thermal_index].temperature < 65)
 	{
 		/* override EDP limits */
-		limit = 1800000;
+		limit = 1700000;
 	}
 
 	return limit;
@@ -501,9 +507,11 @@ static void edp_update_limit(void)
 #else
 	unsigned int i;
 	for (i = 0; freq_table[i].frequency != CPUFREQ_TABLE_END; i++) {
+#ifndef CONFIG_TF300T_OC
 		if (freq_table[i].frequency > limit) {
 			break;
 		}
+#endif
 	}
 	BUG_ON(i == 0);	/* min freq above the limit or table empty */
 	edp_limit = freq_table[i-1].frequency;
