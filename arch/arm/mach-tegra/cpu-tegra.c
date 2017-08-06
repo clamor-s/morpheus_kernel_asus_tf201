@@ -74,6 +74,10 @@ static bool is_suspended;
 static int suspend_index;
 static bool force_policy_max = 1;
 
+#define TEGRA3_DYNAMIC_EDP_THRES_TEMP (60)
+static bool coldstart = 1;
+static bool edp_enable = 1;
+
 int  gps_enable=0;
 
 static bool camera_enable = 0;
@@ -372,7 +376,7 @@ static void edp_update_limit(void)
 #else
 	unsigned int i;
 	for (i = 0; freq_table[i].frequency != CPUFREQ_TABLE_END; i++) {
-#ifndef CONFIG_TF300T_OC
+#ifndef CONFIG_TEGRA3_OVERCLOCK
 		if (freq_table[i].frequency > limit) {
 			break;
 		}
@@ -397,6 +401,16 @@ int tegra_edp_update_thermal_zone(int temperature)
 	int ret = 0;
 	int nlimits = cpu_edp_limits_size;
 	int index;
+
+#ifdef CONFIG_TEGRA3_OVERCLOCK
+	if(temperature >= TEGRA3_DYNAMIC_EDP_THRES_TEMP) {
+		edp_enable = 1;
+		pr_info("%s: Dynamic EDP enabled, temp: %u\n", __func__, temperature);
+	} else {
+		edp_enable = 0;
+		pr_info("%s: Dynamic EDP disabled, temp: %u\n", __func__, temperature);
+	}
+#endif
 
 	if (!cpu_edp_limits)
 		return -EINVAL;
@@ -502,18 +516,24 @@ static int tegra_cpu_edp_notify(
 		edp_update_limit();
 
 		cpu_speed = tegra_getspeed(0);
+#ifdef CONFIG_TEGRA3_OVERCLOCK
+		if(edp_enable) {
+			new_speed = edp_governor_speed(new_speed);
+		} else {
+			new_speed = cpu_speed;
+		}
+#else
 		new_speed = edp_governor_speed(cpu_speed);
+#endif
 		if (new_speed < cpu_speed) {
 			ret = tegra_cpu_set_speed_cap(NULL);
-			printk(KERN_DEBUG "cpu-tegra:%sforce EDP limit %u kHz"
-				"\n", ret ? " failed to " : " ", new_speed);
-		}
-		if (!ret)
-			ret = tegra_cpu_dvfs_alter(
-				edp_thermal_index, &edp_cpumask, false, event);
-		if (ret) {
-			cpu_clear(cpu, edp_cpumask);
-			edp_update_limit();
+			if (ret) {
+				cpu_clear(cpu, edp_cpumask);
+				edp_update_limit();
+			}
+			if (new_speed > 1000000) 
+				printk(KERN_DEBUG "tegra CPU:%sforce EDP limit %u kHz"
+						"\n", ret ? " failed to " : " ", new_speed);
 		}
 		mutex_unlock(&tegra_cpu_lock);
 		break;
@@ -797,7 +817,13 @@ int tegra_cpu_set_speed_cap(unsigned int *speed_cap)
 		return -EBUSY;
 
 	new_speed = tegra_throttle_governor_speed(new_speed);
+#ifdef CONFIG_TEGRA3_OVERCLOCK
+	if(edp_enable) {
 	new_speed = edp_governor_speed(new_speed);
+	}
+#else
+	new_speed = edp_governor_speed(new_speed);
+#endif
 	new_speed = user_cap_speed(new_speed);
 	if (speed_cap)
 		*speed_cap = new_speed;
@@ -817,7 +843,14 @@ int tegra_suspended_target(unsigned int target_freq)
 
 	/* apply only "hard" caps */
 	new_speed = tegra_throttle_governor_speed(new_speed);
-			new_speed = edp_governor_speed(new_speed);
+#ifdef CONFIG_TEGRA3_OVERCLOCK
+	if(edp_enable) {
+		pr_info("%s : Dynamic EDP is enabled\n", __func__);
+		new_speed = edp_governor_speed(new_speed);
+	}
+#else
+	new_speed = edp_governor_speed(new_speed);
+#endif
 
 	return tegra_update_cpu_speed(new_speed);
 }
@@ -974,9 +1007,12 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 	cpumask_copy(policy->related_cpus, cpu_possible_mask);
 
 	if (policy->cpu == 0) {
-                /* set to 1.5GHz stock freq on init */
-		policy->max = 1500000;
 		register_pm_notifier(&tegra_cpu_pm_notifier);
+	}
+	if (coldstart == 1) {
+		/* set to 1.5GHz stock freq on init */
+  		policy->max = 1500000;
+		coldstart = 0;
 	}
 
 	return 0;

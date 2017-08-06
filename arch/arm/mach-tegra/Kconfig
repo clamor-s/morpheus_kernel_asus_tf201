@@ -16,15 +16,8 @@ if ARCH_TEGRA
 
 comment "NVIDIA Tegra options"
 
-config VOLTAGE_CONTROL
-	bool "Enable user voltage control on Tegra CPU"
-	depends on TEGRA_SILICON_PLATFORM
-	default n
-	help
-	User custom voltage control interface
-
-config TF300T_OC
-	bool "Enable higher CPU clock rates on TF300T"
+config TEGRA3_OVERCLOCK
+	bool "Enable higher CPU clock rates"
 	depends on TEGRA_EDP_LIMITS
 	default n
 	help
@@ -383,7 +376,73 @@ config GPU_OVERCLOCK
 	depends on TEGRA_SILICON_PLATFORM
 	default n
 	help
-	Choose y to overclock the GPU
+	Choose y to overclock the GPU.
+	If Off, clock speed is 416MHz.
+	If On, GPU clock speed can be selected.
+
+choice
+
+	depends on GPU_OVERCLOCK
+	prompt "Maximum GPU Rate"
+	default GPU_OC_446
+	---help---
+	  Select the desired GPU overclock rate.
+
+	  If you are not sure what you are doing, leave this
+	  option alone!
+	config GPU_OC_332
+		bool "332 MHz"
+	config GPU_OC_446
+		bool "446 MHz"
+	config GPU_OC_484
+		bool "484 MHz"
+	config GPU_OC_520
+		bool "520 MHz"
+	config GPU_OC_600
+		bool "600 MHz"
+	config GPU_OC_666
+		bool "666 MHz"
+	config GPU_OC_700
+		bool "700 MHz"
+
+endchoice
+
+config LP_OVERCLOCK
+	bool "Enable LP overclock for Tegra3"
+	depends on TEGRA_SILICON_PLATFORM
+	default n
+	---help---
+	  Choose y to overclock the LP core.
+	  If Off, maximum clock speed is 475MHz.
+	  If On, LP clock speed can be selected.
+
+choice
+
+	depends on LP_OVERCLOCK
+	prompt "Maximum LP Rate"
+	default LP_OC_666
+	---help---
+	  Select the desired LP overclock rate.
+
+	  If you are not sure what you are doing, leave this
+	  option alone!
+	config LP_OC_555
+		bool "555 MHz"
+	config LP_OC_620
+		bool "620 MHz"
+	config LP_OC_666
+		bool "666 MHz"
+	config LP_OC_700
+		bool "700 MHz"
+	config LP_OC_740
+		bool "740 MHz"
+
+endchoice
+
+config LP_ONLY
+	bool "Only use the Low-Power companion core"
+	depends on TEGRA_SILICON_PLATFORM
+	default n
 
 config TEGRA_CPU_DVFS
 	bool "Enable voltage scaling on Tegra CPU"
@@ -569,7 +628,7 @@ config TEGRA_DYNAMIC_PWRDET
 config TEGRA_EDP_EXACT_FREQ
 	bool "Use maximum possible cpu frequency when EDP capping"
 	depends on TEGRA_EDP_LIMITS
-	depends on !TF300T_OC
+	depends on !TEGRA3_OVERCLOCK
 	default y
 	help
 	  When enabled the cpu will run at the exact frequency
