@@ -477,7 +477,7 @@ struct rq {
 	u64 nr_last_stamp;
 	unsigned int ave_nr_running;
 	seqcount_t ave_seqcnt;
-
+	
 	/* capture load from *all* tasks on this cpu: */
 	struct load_weight load;
 	unsigned long nr_load_updates;
@@ -2835,7 +2835,8 @@ out:
  */
 int wake_up_process(struct task_struct *p)
 {
-	return try_to_wake_up(p, TASK_ALL, 0);
+	WARN_ON(task_is_stopped_or_traced(p));
+	return try_to_wake_up(p, TASK_NORMAL, 0);
 }
 EXPORT_SYMBOL(wake_up_process);
 
@@ -3809,7 +3810,7 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 	p->utime = cputime_add(p->utime, cputime);
 	p->utimescaled = cputime_add(p->utimescaled, cputime_scaled);
 	account_group_user_time(p, cputime);
-
+	
 	/* Add user time to cpustat. */
 	tmp = cputime_to_cputime64(cputime);
 	if (TASK_NICE(p) > 0)
@@ -3820,7 +3821,7 @@ void account_user_time(struct task_struct *p, cputime_t cputime,
 	cpuacct_update_stats(p, CPUACCT_STAT_USER, cputime);
 	/* Account for user time used */
 	acct_update_integrals(p);
-
+	
 	acct_update_power(p, cputime);
 }
 
@@ -3878,7 +3879,7 @@ void __account_system_time(struct task_struct *p, cputime_t cputime,
 
 	/* Account for system time used */
 	acct_update_integrals(p);
-
+	
 	acct_update_power(p, cputime);
 }
 
@@ -5482,7 +5483,7 @@ long sched_setaffinity(pid_t pid, const struct cpumask *in_mask)
 		goto out_free_cpus_allowed;
 	}
 	retval = -EPERM;
-	if (!check_same_owner(p) && !task_ns_capable(p, CAP_SYS_NICE))
+	if (!check_same_owner(p) && !ns_capable(task_user_ns(p), CAP_SYS_NICE))
 		goto out_unlock;
 
 	retval = security_task_setscheduler(p);

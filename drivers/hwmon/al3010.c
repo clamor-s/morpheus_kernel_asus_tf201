@@ -8,6 +8,8 @@
 #include <linux/hwmon.h>
 #include <linux/hwmon-sysfs.h>
 #include <linux/miscdevice.h>
+#include <linux/kernel.h>
+
 #include <asm/ioctl.h>
 #include <asm/uaccess.h>
 #include <linux/fs.h>
@@ -304,30 +306,8 @@ static int al3010_get_reg_value(struct i2c_client *client)
 
 static int al3010_update_calibration()
 {
-	char buf[256];
-	int calibration_value = 0;
-	mm_segment_t oldfs;
-	oldfs=get_fs();
-	set_fs(get_ds());
-	memset(buf, 0, sizeof(u8)*256);
-	struct file *fp = NULL;
-	fp=filp_open(CAL_ALS_PATH, O_RDONLY, 0);
-	if (!IS_ERR(fp)) {
-		int ret = 0;
-		ret = fp->f_op->read(fp, buf, sizeof(buf), &fp->f_pos);
-		//printk("light sensor info : ret = %d , f_pos = %d",ret ,fp->f_pos);
-		//printk("light sensor info : AL3010_Config content is :%s\n", buf);
-		sscanf(buf,"%d\n", &calibration_value);
-		//printk("light sensor info : calibration_value= %d\n",calibration_value);
-		if(calibration_value > 0){
-			calibration_regs = calibration_value;
-		}
-		filp_close(fp, NULL);
-		set_fs(oldfs);
-		return 0;
-	}else{
-		return -1;
-	}
+	pr_err("No, NVIDIA, in fact you CANNOT read from userspace filesystems in the kernel - dmitrygr!\n");
+	return 0;
 }
 
 /*
