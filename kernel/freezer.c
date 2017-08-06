@@ -9,6 +9,10 @@
 #include <linux/module.h>
 #include <linux/syscalls.h>
 #include <linux/freezer.h>
+#include <linux/kthread.h>
+
+/* protects freezing and frozen transitions */
+static DEFINE_SPINLOCK(freezer_lock);
 
 /*
  * freezing is complete, mark current process as frozen
@@ -23,6 +27,44 @@ static inline void frozen_process(void)
 }
 
 /* Refrigerator is place where frozen processes are stored :-). */
+bool __refrigerator(bool check_kthr_stop)
+{
+	/* Hmm, should we be allowed to suspend when there are realtime
+	   processes around? */
+	bool was_frozen = false;
+	long save = current->state;
+
+	pr_debug("%s entered refrigerator\n", current->comm);
+
+	for (;;) {
+		set_current_state(TASK_UNINTERRUPTIBLE);
+
+		spin_lock_irq(&freezer_lock);
+		current->flags |= PF_FROZEN;
+		if (!freezing(current) ||
+		    (check_kthr_stop && kthread_should_stop()))
+			current->flags &= ~PF_FROZEN;
+		spin_unlock_irq(&freezer_lock);
+
+		if (!(current->flags & PF_FROZEN))
+			break;
+		was_frozen = true;
+		schedule();
+	}
+
+	pr_debug("%s left refrigerator\n", current->comm);
+
+	/*
+	 * Restore saved task state before returning.  The mb'd version
+	 * needs to be used; otherwise, it might silently break
+	 * synchronization which depends on ordered task state change.
+	 */
+	set_current_state(save);
+
+	return was_frozen;
+}
+EXPORT_SYMBOL(__refrigerator);
+
 void refrigerator(void)
 {
 	/* Hmm, should we be allowed to suspend when there are realtime

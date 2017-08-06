@@ -48,8 +48,21 @@ static inline bool should_send_signal(struct task_struct *p)
 extern int thaw_process(struct task_struct *p);
 
 extern void refrigerator(void);
+extern bool __refrigerator(bool check_kthr_stop);
 extern int freeze_processes(void);
 extern void thaw_processes(void);
+
+/*
+ * DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION
+ * If try_to_freeze causes a lockdep warning it means the caller may deadlock
+ */
+static inline bool try_to_freeze_unsafe(void)
+{
+	might_sleep();
+	if (likely(!freezing(current)))
+		return false;
+	return __refrigerator(false);
+}
 
 static inline int try_to_freeze(void)
 {
@@ -59,6 +72,7 @@ static inline int try_to_freeze(void)
 	} else
 		return 0;
 }
+
 
 extern bool freeze_task(struct task_struct *p, bool sig_only);
 extern void cancel_freezing(struct task_struct *p);
@@ -106,6 +120,14 @@ static inline void freezer_count(void)
 		current->flags &= ~PF_FREEZER_SKIP;
 		try_to_freeze();
 	}
+}
+
+/* DO NOT ADD ANY NEW CALLERS OF THIS FUNCTION */
+static inline void freezer_count_unsafe(void)
+{
+	current->flags &= ~PF_FREEZER_SKIP;
+	smp_mb();
+	try_to_freeze_unsafe();
 }
 
 /*
@@ -189,6 +211,7 @@ static inline void set_freeze_flag(struct task_struct *p) {}
 static inline void clear_freeze_flag(struct task_struct *p) {}
 static inline int thaw_process(struct task_struct *p) { return 1; }
 
+static inline bool __refrigerator(bool check_kthr_stop) { return false; }
 static inline void refrigerator(void) {}
 static inline int freeze_processes(void) { BUG(); return 0; }
 static inline void thaw_processes(void) {}
