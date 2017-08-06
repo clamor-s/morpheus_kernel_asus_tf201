@@ -422,31 +422,9 @@ menuconfig TCP_CONG_ADVANCED
 
 if TCP_CONG_ADVANCED
 
-config TCP_CONG_BIC
-	tristate "Binary Increase Congestion (BIC) control"
-	default m
-	---help---
-	BIC-TCP is a sender-side only change that ensures a linear RTT
-	fairness under large windows while offering both scalability and
-	bounded TCP-friendliness. The protocol combines two schemes
-	called additive increase and binary search increase. When the
-	congestion window is large, additive increase with a large
-	increment ensures linear RTT fairness as well as good
-	scalability. Under small congestion windows, binary search
-	increase provides TCP friendliness.
-	See http://www.csc.ncsu.edu/faculty/rhee/export/bitcp/
-
-config TCP_CONG_CUBIC
-	tristate "CUBIC TCP"
-	default y
-	---help---
-	This is version 2.0 of BIC-TCP which uses a cubic growth function
-	among other techniques.
-	See http://www.csc.ncsu.edu/faculty/rhee/export/bitcp/cubic-paper.pdf
-
 config TCP_CONG_WESTWOOD
 	tristate "TCP Westwood+"
-	default m
+	default y
 	---help---
 	TCP Westwood+ is a sender-side only modification of the TCP Reno
 	protocol stack that optimizes the performance of TCP congestion
@@ -459,8 +437,8 @@ config TCP_CONG_WESTWOOD
 	wired networks and throughput over wireless links.
 
 config TCP_CONG_HTCP
-        tristate "H-TCP"
-        default m
+    tristate "H-TCP"
+    default n
 	---help---
 	H-TCP is a send-side only modifications of the TCP Reno
 	protocol stack that optimizes the performance of TCP
@@ -468,27 +446,6 @@ config TCP_CONG_HTCP
 	modeswitch to change the alpha and beta parameters of TCP Reno
 	based on network conditions and in a way so as to be fair with
 	other Reno and H-TCP flows.
-
-config TCP_CONG_HSTCP
-	tristate "High Speed TCP"
-	depends on EXPERIMENTAL
-	default n
-	---help---
-	Sally Floyd's High Speed TCP (RFC 3649) congestion control.
-	A modification to TCP's congestion control mechanism for use
-	with large congestion windows. A table indicates how much to
-	increase the congestion window by when an ACK is received.
- 	For more detail	see http://www.icir.org/floyd/hstcp.html
-
-config TCP_CONG_HYBLA
-	tristate "TCP-Hybla congestion control algorithm"
-	depends on EXPERIMENTAL
-	default n
-	---help---
-	TCP-Hybla is a sender-side only change that eliminates penalization of
-	long-RTT, large-bandwidth connections, like when satellite legs are
-	involved, especially when sharing a common bottleneck with normal
-	terrestrial connections.
 
 config TCP_CONG_VEGAS
 	tristate "TCP Vegas"
@@ -500,38 +457,6 @@ config TCP_CONG_VEGAS
 	adjusts the sending rate by modifying the congestion
 	window. TCP Vegas should provide less packet loss, but it is
 	not as aggressive as TCP Reno.
-
-config TCP_CONG_SCALABLE
-	tristate "Scalable TCP"
-	depends on EXPERIMENTAL
-	default n
-	---help---
-	Scalable TCP is a sender-side only change to TCP which uses a
-	MIMD congestion control algorithm which has some nice scaling
-	properties, though is known to have fairness issues.
-	See http://www.deneholme.net/tom/scalable/
-
-config TCP_CONG_LP
-	tristate "TCP Low Priority"
-	depends on EXPERIMENTAL
-	default n
-	---help---
-	TCP Low Priority (TCP-LP), a distributed algorithm whose goal is
-	to utilize only the excess network bandwidth as compared to the
-	``fair share`` of bandwidth as targeted by TCP.
-	See http://www-ece.rice.edu/networks/TCP-LP/
-
-config TCP_CONG_VENO
-	tristate "TCP Veno"
-	depends on EXPERIMENTAL
-	default n
-	---help---
-	TCP Veno is a sender-side only enhancement of TCP to obtain better
-	throughput over wireless networks. TCP Veno makes use of state
-	distinguishing to circumvent the difficult judgment of the packet loss
-	type. TCP Veno cuts down less congestion window in response to random
-	loss packets.
-	See <http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=1177186> 
 
 config TCP_CONG_YEAH
 	tristate "YeAH TCP"
@@ -563,55 +488,37 @@ config TCP_CONG_ILLINOIS
 
 choice
 	prompt "Default TCP congestion control"
-	default DEFAULT_CUBIC
+	default DEFAULT_WESTWOOD
 	help
 	  Select the TCP congestion control that will be used by default
 	  for all connections.
 
-	config DEFAULT_BIC
-		bool "Bic" if TCP_CONG_BIC=y
-
-	config DEFAULT_CUBIC
-		bool "Cubic" if TCP_CONG_CUBIC=y
+	config DEFAULT_WESTWOOD
+		bool "Westwood" if TCP_CONG_WESTWOOD=y
 
 	config DEFAULT_HTCP
 		bool "Htcp" if TCP_CONG_HTCP=y
 
-	config DEFAULT_HYBLA
-		bool "Hybla" if TCP_CONG_HYBLA=y
+	config DEFAULT_YEAH
+		bool "Yeah" if TCP_CONG_YEAH=y
+		
+	config DEFAULT_ILLINOIS
+		bool "Illinois" if TCP_CONG_ILLINOIS=y
 
 	config DEFAULT_VEGAS
 		bool "Vegas" if TCP_CONG_VEGAS=y
-
-	config DEFAULT_VENO
-		bool "Veno" if TCP_CONG_VENO=y
-
-	config DEFAULT_WESTWOOD
-		bool "Westwood" if TCP_CONG_WESTWOOD=y
-
-	config DEFAULT_RENO
-		bool "Reno"
 
 endchoice
 
 endif
 
-config TCP_CONG_CUBIC
-	tristate
-	depends on !TCP_CONG_ADVANCED
-	default y
-
 config DEFAULT_TCP_CONG
 	string
-	default "bic" if DEFAULT_BIC
-	default "cubic" if DEFAULT_CUBIC
-	default "htcp" if DEFAULT_HTCP
-	default "hybla" if DEFAULT_HYBLA
-	default "vegas" if DEFAULT_VEGAS
 	default "westwood" if DEFAULT_WESTWOOD
-	default "veno" if DEFAULT_VENO
-	default "reno" if DEFAULT_RENO
-	default "cubic"
+	default "htcp" if DEFAULT_HTCP
+	default "yeah" if DEFAULT_YEAH
+	default "illinois" if DEFAULT_ILLINOIS
+	default "vegas" if DEFAULT_VEGAS
 
 config TCP_MD5SIG
 	bool "TCP: MD5 Signature Option support (RFC2385) (EXPERIMENTAL)"
