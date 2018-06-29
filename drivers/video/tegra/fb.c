@@ -101,6 +101,7 @@ static int tegra_fb_set_par(struct fb_info *info)
 		/* we only support RGB ordering for now */
 		switch (var->bits_per_pixel) {
 		case 32:
+			pr_info("[FB]: framebuffer mode is set to R8G8B8A8 (var->bits_per_pixel = 32)\n");
 			var->red.offset = 0;
 			var->red.length = 8;
 			var->green.offset = 8;
@@ -112,6 +113,7 @@ static int tegra_fb_set_par(struct fb_info *info)
 			tegra_fb->win->fmt = TEGRA_WIN_FMT_R8G8B8A8;
 			break;
 		case 16:
+			pr_info("[FB]: framebuffer mode is set to B5G6R5 (var->bits_per_pixel = 16)\n");
 			var->red.offset = 11;
 			var->red.length = 5;
 			var->green.offset = 5;
