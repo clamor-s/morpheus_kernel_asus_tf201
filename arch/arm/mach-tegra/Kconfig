@@ -223,6 +223,11 @@ config MACH_KAI
        help
          Support for NVIDIA KAI development platform
 
+config TEGRA_BOOTBLOCK_EXPOSE
+       depends on ARCH_TEGRA
+       bool "Expose boot/recovery partitions through GPT driver"
+       default y
+
 choice
        prompt "Tegra platform type"
        default TEGRA_SILICON_PLATFORM
