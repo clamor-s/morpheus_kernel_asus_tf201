@@ -54,9 +54,9 @@
 #include "mldl_cfg.h"
 #include <linux/mpu.h>
 
-#include "../../../../arch/arm/mach-tegra/board-cardhu.h"
+#include "../../../../arch/arm/mach-tegra/board-transformer.h"
 #include "../../../../arch/arm/mach-tegra/gpio-names.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "accel/mpu6050.h"
 extern bool mpu6050_flagLoadConfig;
@@ -1339,7 +1339,7 @@ int mpu6050_probe(struct i2c_client *client, const struct i2c_device_id *devid)
 	}
 
 	mpu->mpu_ver = "6050";
-	// MPU-IRQ assignment 
+	// MPU-IRQ assignment
 
     // nv hided this
 	// tegra_gpio_enable(MPU_GYRO_IRQ_GPIO);
@@ -1404,7 +1404,7 @@ int mpu6050_probe(struct i2c_client *client, const struct i2c_device_id *devid)
 #else
 		mpu->attrs.attrs = mpu_6050_attr_user;
 #endif
-	
+
 	res = sysfs_create_group(&client->dev.kobj, &mpu->attrs);
 	if (res) {
 		dev_err(&client->dev, "Not able to create the sysfs\n");

@@ -10,7 +10,7 @@
 #include <linux/fcntl.h>
 #include <linux/switch.h>
 #include <media/yuv_sensor.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define CHECK_WRITE(x) {if (x) _T("err=%d",x);}
 #define FJM6MO_DEBUG

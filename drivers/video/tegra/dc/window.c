@@ -23,7 +23,7 @@
 #include "dc_config.h"
 #include "dc_priv.h"
 
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 static int no_vsync;
 static atomic_t frame_end_ref = ATOMIC_INIT(0);

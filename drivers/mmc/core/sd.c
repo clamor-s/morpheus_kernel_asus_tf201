@@ -25,7 +25,7 @@
 #include "sd_ops.h"
 
 #include "../debug_mmc.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 static const unsigned int tran_exp[] = {
 	10000,		100000,		1000000,	10000000,
@@ -842,7 +842,7 @@ int mmc_sd_setup_card(struct mmc_host *host, struct mmc_card *card,
 			if (!err) {
 				if (retries > 1) {
 					printk(KERN_WARNING
-					       "%s: recovered\n", 
+					       "%s: recovered\n",
 					       mmc_hostname(host));
 				}
 				break;
@@ -1073,7 +1073,7 @@ static int mmc_sd_detect(struct mmc_host *host)
 
 	BUG_ON(!host);
 	BUG_ON(!host->card);
-       
+
 	mmc_claim_host(host);
 
 	/*

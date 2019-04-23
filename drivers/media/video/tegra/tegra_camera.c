@@ -30,7 +30,7 @@
 #include <mach/powergate.h>
 
 #include <media/tegra_camera.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <mach/pinmux.h>
 
 /* Eventually this should handle all clock and reset calls for the isp, vi,

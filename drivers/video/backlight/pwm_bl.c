@@ -25,7 +25,7 @@
 #include "../gpio-names.h"
 #include "../tegra/dc/dc_priv.h"
 #include <linux/i2c.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define ENABLE_DEBUG_I2C_P1801 0        // define 1 to enable DEBUG statements
 #if ENABLE_DEBUG_I2C_P1801

@@ -36,7 +36,7 @@
 #include "sdhci-pltfm.h"
 
 #include "../debug_mmc.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <../gpio-names.h>
 
 #define SDHCI_VENDOR_CLOCK_CNTRL	0x100

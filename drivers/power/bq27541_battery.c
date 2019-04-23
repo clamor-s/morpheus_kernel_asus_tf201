@@ -37,7 +37,7 @@
 #include <mach/gpio.h>
 #include "../../arch/arm/mach-tegra/gpio-names.h"
 #include "../../arch/arm/mach-tegra/wakeups-t3.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define SMBUS_RETRY                                     (0)
 #define BAT_IN_DET                                        TEGRA_GPIO_PN4
@@ -596,7 +596,7 @@ static int bq27541_get_psp(int reg_offset, enum power_supply_property psp,
 			}
 		}
 		bq27541_device->old_temperature = val->intval = ret;
-		BAT_NOTICE("temperature= %d (0.1¢XC)\n", val->intval);
+		BAT_NOTICE("temperature= %d (0.1\A2XC)\n", val->intval);
 	}
 	return 0;
 }

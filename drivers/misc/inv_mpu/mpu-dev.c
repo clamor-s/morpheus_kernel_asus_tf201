@@ -54,8 +54,8 @@
 #include "mldl_cfg.h"
 #include <linux/mpu.h>
 
-#include "../../../arch/arm/mach-tegra/include/mach/board-cardhu-misc.h"
-#include "../../../../arch/arm/mach-tegra/board-cardhu.h"
+#include "../../../arch/arm/mach-tegra/include/mach/board-transformer-misc.h"
+#include "../../../../arch/arm/mach-tegra/board-transformer.h"
 #include "../../../../arch/arm/mach-tegra/gpio-names.h"
 
 #define REG_NUM 	96	/* Number of registers about KXTF9*/

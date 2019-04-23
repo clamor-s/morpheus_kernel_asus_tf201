@@ -23,7 +23,7 @@
 #include <linux/seq_file.h>
 #include <linux/slab.h>
 #include <mach/edp.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include "fuse.h"
 
 static const struct tegra_edp_limits *edp_limits;
@@ -373,7 +373,7 @@ void __init tegra_init_cpu_edp_limits(unsigned int regulator_mA)
 				e[j].freq_limits[1] = (unsigned int)(t[i+j].freq_limits[1]-5) * 10000;
 				e[j].freq_limits[2] = (unsigned int)(t[i+j].freq_limits[2]-5) * 10000;
 				e[j].freq_limits[3] = (unsigned int)(t[i+j].freq_limits[3]-5) * 10000;
-			} else {	
+			} else {
 				e[j].freq_limits[0] = (unsigned int)(t[i+j].freq_limits[0]-30) * 10000;
 				e[j].freq_limits[1] = (unsigned int)(t[i+j].freq_limits[1]-20) * 10000;
 				e[j].freq_limits[2] = (unsigned int)(t[i+j].freq_limits[2]-20) * 10000;

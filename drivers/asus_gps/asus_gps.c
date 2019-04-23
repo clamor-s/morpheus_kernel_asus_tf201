@@ -9,8 +9,8 @@
 #include <linux/interrupt.h>
 #include <linux/wakelock.h>
 #include "asus_gps.h"
-#include "board-cardhu.h"
-#include <mach/board-cardhu-misc.h>
+#include "board-transformer.h"
+#include <mach/board-transformer-misc.h>
 
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_LICENSE("GPL");

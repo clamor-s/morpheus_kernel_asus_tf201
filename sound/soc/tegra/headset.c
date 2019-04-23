@@ -39,7 +39,7 @@
 #include <sound/soc.h>
 #include <linux/wakelock.h>
 #include "../gpio-names.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include "../codecs/wm8903.h"
 #include "../codecs/rt5640.h"
 #include "../../../arch/arm/mach-tegra/board.h"

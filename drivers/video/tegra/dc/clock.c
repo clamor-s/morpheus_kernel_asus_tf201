@@ -25,7 +25,7 @@
 
 #include "dc_reg.h"
 #include "dc_priv.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 extern int cn_vf_sku;
 

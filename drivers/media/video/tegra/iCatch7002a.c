@@ -36,7 +36,7 @@
 #include <mach/clk.h>
 #endif
 #include <linux/switch.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define I7002A_SDEV_NAME "camera"
 
@@ -1957,7 +1957,7 @@ static int sensor_set_mode(struct sensor_info *info, struct sensor_mode *mode)
 		//sensor_write_reg(info->i2c_client, 0x7106, 0x00);
 		if(tegra3_get_project_id() == TEGRA3_PROJECT_ME301T ||
 		    tegra3_get_project_id() == TEGRA3_PROJECT_ME301TL)
-			sensor_write_reg(info->i2c_client, 0x72f8, 0x04);		
+			sensor_write_reg(info->i2c_client, 0x72f8, 0x04);
 		sensor_write_reg(info->i2c_client, 0x7106, 0x00);//preview mode
 		sensor_write_reg(info->i2c_client, 0x7120, 0x00);
 		//sensor_write_reg(info->i2c_client, 0x7106, 0x00);//workaround for ov2720 output size, not affect IMX175
@@ -4389,5 +4389,4 @@ static int __init tegra_i2c_debuginit(void)
 
 late_initcall(tegra_i2c_debuginit);
 #endif
-
 

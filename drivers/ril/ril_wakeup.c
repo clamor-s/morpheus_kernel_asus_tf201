@@ -8,7 +8,7 @@
 #include <linux/wakelock.h>
 #include <linux/workqueue.h>
 
-#include "include/mach/board-cardhu-misc.h"
+#include "include/mach/board-transformer-misc.h"
 #include "pm-irq.h"
 #include "ril.h"
 #include "ril_wakeup.h"

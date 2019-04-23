@@ -8,9 +8,9 @@
 #include <linux/delay.h>
 #include <linux/wakelock.h>
 
-#include "board-cardhu.h"
+#include "board-transformer.h"
 #include "baseband-xmm-power.h"
-#include "include/mach/board-cardhu-misc.h"
+#include "include/mach/board-transformer-misc.h"
 
 #include "pm-irq.h"
 #include "ril.h"

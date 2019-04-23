@@ -33,7 +33,7 @@
 
 #include <mach/iomap.h>
 #include <mach/edp.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "clock.h"
 #include "fuse.h"

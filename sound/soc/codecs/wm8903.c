@@ -37,7 +37,7 @@
 
 #include "wm8903.h"
 
-#include <../board-cardhu.h>
+#include <../board-transformer.h>
 
 static int codec_wm8903_status = 0;
 static struct attribute_group attrs;

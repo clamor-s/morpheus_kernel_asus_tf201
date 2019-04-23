@@ -55,7 +55,7 @@
 #include "tegra_pcm.h"
 #include "tegra_asoc_utils.h"
 
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include "../drivers/input/asusec/asusdec.h"
 
 #include <asm/gpio.h>

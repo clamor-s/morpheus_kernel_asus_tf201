@@ -32,7 +32,7 @@
 
 #include <linux/mfd/core.h>
 #include <linux/mfd/tps6591x.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 //=================stree test=================
 #include <linux/miscdevice.h>
 #include <linux/ioctl.h>

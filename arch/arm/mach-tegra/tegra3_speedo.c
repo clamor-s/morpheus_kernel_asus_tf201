@@ -25,7 +25,7 @@
 #include <mach/tegra_fuse.h>
 #include <linux/module.h>
 #include <linux/moduleparam.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "fuse.h"
 
@@ -104,9 +104,9 @@ static const u32 cpu_process_speedos[][CPU_PROCESS_CORNERS_NUM] = {
 	{295, 336, 358, 375, UINT_MAX},      /* [7]: cpu_speedo_id: 4: AP33 */
 #ifdef CONFIG_TEGRA3_OVERCLOCK
 	{295, 336, 358, 375, 391, UINT_MAX}, /* [10]: cpu_speedo_id: 7: T30L */
-#else		
+#else
 	{358, 358, 358, 358, 397, UINT_MAX}, /* [8]: cpu_speedo_id: 5: T33  */
-#endif	
+#endif
 	{364, 364, 364, 364, 397, UINT_MAX}, /* [9]: cpu_speedo_id: 6/12: T33S/AP37 */
 
 /* T30 'L' family */
@@ -221,10 +221,10 @@ static void rev_sku_to_speedo_ids(int rev, int sku)
 				break;
 			}
 			break;
-			
+
 #ifdef CONFIG_TEGRA3_OVERCLOCK
 		case 0x83: /* T30L or T30S */
-#endif	
+#endif
 		case 0x80: /* T33 or T33S */
 			switch (package_id) {
 			case 1: /* MID => T33 */

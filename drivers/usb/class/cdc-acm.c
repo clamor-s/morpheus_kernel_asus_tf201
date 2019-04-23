@@ -49,7 +49,7 @@
 #include <linux/list.h>
 
 #include "cdc-acm.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define DRIVER_AUTHOR "Armin Fuerst, Pavel Machek, Johannes Erdfelt, Vojtech Pavlik, David Kubicek, Johan Hovold"
 #define DRIVER_DESC "USB Abstract Control Model driver for USB modems and ISDN adapters"

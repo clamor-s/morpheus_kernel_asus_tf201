@@ -14,7 +14,7 @@
 #include <linux/err.h>
 #include <linux/fb.h>
 #include <linux/slab.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #ifdef CONFIG_PMAC_BACKLIGHT
 #include <asm/backlight.h>

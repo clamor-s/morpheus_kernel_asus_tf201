@@ -28,11 +28,11 @@
 #include <sound/initval.h>
 #include <linux/gpio.h>
 #include <../gpio-names.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "rt5631.h"
 
-#include <../board-cardhu.h>
+#include <../board-transformer.h>
 
 #define RTK_IOCTL
 #if defined(RTK_IOCTL)

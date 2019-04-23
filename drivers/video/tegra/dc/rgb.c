@@ -23,7 +23,7 @@
 
 #include "dc_reg.h"
 #include "dc_priv.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 
 static const u32 tegra_dc_rgb_enable_partial_pintable[] = {

@@ -38,7 +38,7 @@
 #include <linux/workqueue.h>
 #include <asm/uaccess.h>
 #include "../../arch/arm/mach-tegra/gpio-names.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <linux/smb347-charger.h>
 
 #define smb347_CHARGE		0x00

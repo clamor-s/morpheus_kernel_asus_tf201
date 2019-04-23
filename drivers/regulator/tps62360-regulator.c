@@ -35,7 +35,7 @@
 #include <linux/delay.h>
 #include <linux/slab.h>
 #include <linux/regmap.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 //=================stree test=================
 #include <linux/miscdevice.h>
@@ -386,7 +386,7 @@ static const struct attribute_group tps62360_i2c_group = {
  struct workqueue_struct *tps62360_strees_work_queue=NULL;
 
 void tps62360_read_stress_test(struct work_struct *work)
-{ 
+{
 	int ret;
 	unsigned int chip_id = 0;
 	ret = regmap_read(temp_tps62360->regmap, REG_CHIPID, &chip_id);

@@ -30,7 +30,7 @@
 #include <linux/io.h>
 #include <linux/delay.h>
 #include <linux/err.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define BATTERY_CALLBACK_ENABLED 1
 #define USB_PHY_WAKEUP		0x408

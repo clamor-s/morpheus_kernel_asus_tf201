@@ -38,7 +38,7 @@
 #include "clock.h"
 #include "dvfs.h"
 #include "tegra3_emc.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #ifdef CONFIG_TEGRA_EMC_SCALING_ENABLE
 static bool emc_enable = true;

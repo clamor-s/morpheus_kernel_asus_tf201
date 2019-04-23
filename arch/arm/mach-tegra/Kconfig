@@ -238,6 +238,15 @@ config MACH_KAI
        help
          Support for NVIDIA KAI development platform
 
+config MACH_TRANSFORMER
+       bool "Transformer board"
+       depends on ARCH_TEGRA_3x_SOC
+       depends on !MACH_CARDHU
+       select MACH_HAS_SND_SOC_TEGRA_RT5631 if SND_SOC
+       select MACH_HAS_SND_SOC_TEGRA_WM8903 if SND_SOC
+       help
+         Support for Asus Transformer Tablets (TF201/TF300T/TF700T)
+
 config TEGRA_BOOTBLOCK_EXPOSE
        depends on ARCH_TEGRA
        bool "Expose boot/recovery partitions through GPT driver"

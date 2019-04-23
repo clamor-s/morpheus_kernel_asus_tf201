@@ -26,9 +26,9 @@
 #include <../tegra_usb_phy.h>
 #include <linux/gpio.h>
 #include <../gpio-names.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <mach/clk.h>
-#include "board-cardhu.h"
+#include "board-transformer.h"
 
 #if 0
 #define EHCI_DBG(stuff...)	pr_info("ehci-tegra: " stuff)

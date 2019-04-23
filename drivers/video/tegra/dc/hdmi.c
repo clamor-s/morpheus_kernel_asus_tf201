@@ -48,7 +48,7 @@
 #include "hdmi.h"
 #include "edid.h"
 #include "nvhdcp.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 /* datasheet claims this will always be 216MHz */
 #define HDMI_AUDIOCLK_FREQ		216000000

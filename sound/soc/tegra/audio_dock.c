@@ -25,7 +25,7 @@
 #include <sound/soc.h>
 #include "../codecs/wm8903.h"
 #include "../drivers/input/asusec/asusdec.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <asm/gpio.h>
 #include "../gpio-names.h"
 

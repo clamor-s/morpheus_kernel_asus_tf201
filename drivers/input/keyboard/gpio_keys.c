@@ -33,7 +33,7 @@
 #include <linux/of_gpio.h>
 #include <linux/spinlock.h>
 #include <../gpio-names.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 struct gpio_button_data {
 	const struct gpio_keys_button *button;
@@ -366,7 +366,7 @@ static void gpio_keys_gpio_work_func(struct work_struct *work)
 	struct gpio_button_data *bdata =
 		container_of(work, struct gpio_button_data, work);
 	u32 project_info = tegra3_get_project_id();
-	
+
 	/* Valid keys were logged for debugging in machine grouper */
 	const struct gpio_keys_button *button = bdata->button;
 	int state = (gpio_get_value_cansleep(button->gpio) ? 1 : 0)
@@ -384,7 +384,7 @@ static void gpio_keys_gpio_work_func(struct work_struct *work)
 		else if((button->code == KEY_MODE))
 			pr_info("gpio_keys: %s KEY_MODE\n", state ? "Pressed" : "Released");
 	}
-	
+
 	gpio_keys_gpio_report_event(bdata);
 }
 

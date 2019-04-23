@@ -49,7 +49,7 @@
 #include <../gpio-names.h>
 #include <mach/usb_phy.h>
 #include <mach/iomap.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "tegra_udc.h"
 

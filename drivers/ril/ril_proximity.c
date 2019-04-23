@@ -6,7 +6,7 @@
 #include <linux/irq.h>
 #include <linux/switch.h>
 
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "baseband-xmm-power.h"
 #include "ril.h"

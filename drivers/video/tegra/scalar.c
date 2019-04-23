@@ -9,7 +9,7 @@
 #include <linux/file.h>
 #include <linux/fcntl.h>
 #include <linux/switch.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <linux/gpio.h>
 #include "../gpio-names.h"
 

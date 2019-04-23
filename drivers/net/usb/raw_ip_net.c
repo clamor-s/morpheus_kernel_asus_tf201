@@ -30,7 +30,7 @@
 #include <linux/etherdevice.h>
 #include <linux/usb.h>
 
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define BASEBAND_USB_NET_DEV_NAME		"rmnet%d"
 

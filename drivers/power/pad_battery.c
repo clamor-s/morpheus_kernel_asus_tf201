@@ -36,7 +36,7 @@
 #include <linux/timer.h>
 #include "../../arch/arm/mach-tegra/gpio-names.h"
 #include "../../arch/arm/mach-tegra/wakeups-t3.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 #include <linux/delay.h>
 #define SMBUS_RETRY                                     (3)
 #define BAT_IN_DET                                        TEGRA_GPIO_PN4
@@ -48,9 +48,9 @@
 #define TEMP_KELVIN_TO_CELCIUS                             (2731)
 #define MAXIMAL_VALID_BATTERY_TEMP                             (200)
 #define USB_NO_Cable 0
-#define USB_DETECT_CABLE 1 
+#define USB_DETECT_CABLE 1
 #define USB_SHIFT 0
-#define AC_SHIFT 1 
+#define AC_SHIFT 1
 #define USB_Cable ((1 << (USB_SHIFT)) | (USB_DETECT_CABLE))
 #define USB_AC_Adapter ((1 << (AC_SHIFT)) | (USB_DETECT_CABLE))
 #define USB_CALBE_DETECT_MASK (USB_Cable  | USB_DETECT_CABLE)
@@ -65,7 +65,7 @@ static unsigned int  battery_remaining_capacity;
 module_param(battery_current, uint, 0644);
 module_param(battery_remaining_capacity, uint, 0644);
 enum {
-       REG_MANUFACTURER_DATA,  	
+       REG_MANUFACTURER_DATA,
 	REG_STATE_OF_HEALTH,
 	REG_TEMPERATURE,
 	REG_VOLTAGE,
@@ -76,7 +76,7 @@ enum {
 	REG_CAPACITY,
 	REG_SERIAL_NUMBER,
 	REG_MAX
-};    
+};
 typedef enum {
 	Charger_Type_Battery = 0,
 	Charger_Type_AC,
@@ -180,7 +180,7 @@ static int power_get_property(struct power_supply *psy,
 			val->intval =  1;
 		   else if (psy->type == POWER_SUPPLY_TYPE_DOCK_AC&& battery_docking_status)
 			val->intval =  1;
-		   else 
+		   else
 		   	val->intval = 0;
 		break;
 
@@ -262,7 +262,7 @@ static struct pad_device_info {
 	int bat_current;
 	int bat_capacity;
 } *pad_device;
-	
+
 void  register_usb_cable_status_cb(unsigned  (*fn) (void))
 {
 	if (!get_usb_cable_status_cb)
@@ -305,7 +305,7 @@ static const struct attribute_group battery_charger_group = {
 int pad_smbus_read_data(int reg_offset,int byte)
 {
      s32 ret=-EINVAL;
-     int count=0; 
+     int count=0;
      do{
 	    if(byte)
               ret=i2c_smbus_read_byte_data(pad_device->client,pad_data[reg_offset].addr);
@@ -319,7 +319,7 @@ int pad_smbus_read_data(int reg_offset,int byte)
 int pad_smbus_write_data(int reg_offset,int byte, unsigned int value)
 {
      s32 ret=-EINVAL;
-     int count=0; 
+     int count=0;
 
      do{
 	    if(byte){
@@ -390,7 +390,7 @@ static irqreturn_t low_battery_detect_isr(int irq, void *dev_id)
 void setup_detect_irq(void )
 {
        s32 ret=0;
-	
+
 	pad_device->battery_present=0;
 	pad_device->low_battery_present=0;
        ret = gpio_request(pad_device->gpio_battery_detect, "battery_detect");
@@ -399,7 +399,7 @@ void setup_detect_irq(void )
 		pad_device->gpio_battery_detect = -1;
 		goto setup_low_bat_irq;
 	}
-	
+
 	pad_device->irq_battery_detect = gpio_to_irq(pad_device->gpio_battery_detect);
 	if (pad_device->irq_battery_detect < 0) {
 		printk("invalid battery_detect GPIO\n");
@@ -422,7 +422,7 @@ void setup_detect_irq(void )
 	 pad_device->battery_present=!(gpio_get_value(pad_device->gpio_battery_detect));
 	printk("setup_irq: battery_present =%x   \n",pad_device->battery_present);
 setup_low_bat_irq:
- 	
+
 	return;
 }
 void setup_low_battery_irq(void )
@@ -589,10 +589,10 @@ void   init_docking_charging_irq(void)
 }
 static int pad_get_health(enum power_supply_property psp,
 	union power_supply_propval *val)
-{	
+{
 	if (psp == POWER_SUPPLY_PROP_PRESENT) {
 		val->intval = pad_device->battery_present;
-	}		
+	}
 	else if (psp == POWER_SUPPLY_PROP_HEALTH) {
 		if( pad_device->battery_present)
 			val->intval = POWER_SUPPLY_HEALTH_GOOD;
@@ -626,7 +626,7 @@ static int pad_get_psp(int reg_offset, enum power_supply_property psp,
 	if (pad_device->smbus_status < 0) {
 		dev_err(&pad_device->client->dev,
 			"%s: i2c read for %d failed\n", __func__, reg_offset);
-		
+
 		if(psp == POWER_SUPPLY_PROP_TEMP && (++pad_device->temp_err<=3) &&(pad_device->old_temperature!=0xFF)){
 			val->intval=pad_device->old_temperature;
 			printk("read battery's tempurate fail use old temperature=%u pad_device->temp_err=%u\n",val->intval,pad_device->temp_err);
@@ -652,7 +652,7 @@ static int pad_get_psp(int reg_offset, enum power_supply_property psp,
 			val->intval = POWER_SUPPLY_STATUS_FULL;
 		else if (ret & BATTERY_FULL_DISCHARGED)//fd
 			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
-		else 
+		else
 			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
 		printk("pad_get_psp  val->intval=%s ret=%x\n" ,status_text[val->intval],ret);//4
 	}else if (psp == POWER_SUPPLY_PROP_TEMP) {
@@ -776,12 +776,12 @@ static int pad_get_property(struct power_supply *psy,
 				"%s: INVALID property psp=%u\n", __func__,psp);
 			return -EINVAL;
 	}
-  
+
 	return 0;
 
 	error:
-		
-	return -EINVAL;	
+
+	return -EINVAL;
 }
 #include "stress_test.c"
 void config_thermal_power(void)

@@ -49,7 +49,7 @@
 #include "mlsl.h"
 #include "mldl_cfg.h"
 
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #undef MPL_LOG_TAG
 #define MPL_LOG_TAG "MPL-compass"

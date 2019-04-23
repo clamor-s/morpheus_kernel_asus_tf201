@@ -22,7 +22,7 @@
 #include <../gpio-names.h>
 #include <linux/statfs.h>
 #include "asuspec.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_LICENSE("GPL");

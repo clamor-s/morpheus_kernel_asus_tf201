@@ -33,7 +33,7 @@
 #include <linux/gpio.h>
 #include <../gpio-names.h>
 #include "gadget_chips.h"
-#include <../../../arch/arm/mach-tegra/include/mach/board-cardhu-misc.h>
+#include <../../../arch/arm/mach-tegra/include/mach/board-transformer-misc.h>
 
 /*
  * Kbuild is not very cooperative with respect to linking separately

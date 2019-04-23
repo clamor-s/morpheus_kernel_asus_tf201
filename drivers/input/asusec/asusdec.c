@@ -20,7 +20,7 @@
 #include <asm/uaccess.h>
 #include <linux/power_supply.h>
 #include <../gpio-names.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include "asusdec.h"
 #include "elan_i2c_asus.h"

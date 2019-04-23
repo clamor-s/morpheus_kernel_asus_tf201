@@ -52,7 +52,7 @@
 
 #include "tegra_pcm.h"
 #include "tegra_asoc_utils.h"
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define DRV_NAME "tegra-snd-codec"
 

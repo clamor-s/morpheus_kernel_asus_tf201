@@ -70,7 +70,7 @@ static struct timeval t_suspend;
 static struct regulator *cardhu_camera_reg = NULL;
 
 #include <linux/pwm.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #define EN_VDD_BL TEGRA_GPIO_PH3
 extern int ME301T_panel_8v;

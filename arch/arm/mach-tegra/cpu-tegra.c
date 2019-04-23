@@ -33,7 +33,7 @@
 #include <linux/suspend.h>
 #include <linux/debugfs.h>
 #include <linux/cpu.h>
-#include <mach/board-cardhu-misc.h>
+#include <mach/board-transformer-misc.h>
 
 #include <asm/system.h>
 
@@ -531,7 +531,7 @@ static int tegra_cpu_edp_notify(
 				cpu_clear(cpu, edp_cpumask);
 				edp_update_limit();
 			}
-			if (new_speed > 1000000) 
+			if (new_speed > 1000000)
 				printk(KERN_DEBUG "tegra CPU:%sforce EDP limit %u kHz"
 						"\n", ret ? " failed to " : " ", new_speed);
 		}

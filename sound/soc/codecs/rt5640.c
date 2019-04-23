@@ -32,8 +32,8 @@
 #include <linux/gpio.h>
 
 #include <../gpio-names.h>
-#include <mach/board-cardhu-misc.h>
-#include <../board-cardhu.h>
+#include <mach/board-transformer-misc.h>
+#include <../board-transformer.h>
 #include <linux/mfd/tps6591x.h>
 #include <linux/regulator/tps62360.h>
 #include <linux/regulator/consumer.h>
