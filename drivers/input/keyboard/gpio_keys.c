@@ -347,7 +347,7 @@ static void gpio_keys_gpio_report_event(struct gpio_button_data *bdata)
 		if (state)
 			input_event(input, type, button->code, button->value);
 	} else {
-		if (machine_is_cardhu() && button->code == KEY_POWER) {
+		if ((machine_is_cardhu() || machine_is_transformer()) && button->code == KEY_POWER) {
 			if (!prev_state && (prev_state == state)) {
 				pr_info("gpio_keys: Make up pressed"
 						" KEY_POWER\n");
@@ -377,7 +377,7 @@ static void gpio_keys_gpio_work_func(struct work_struct *work)
 		return ;
 	}
 
-	if (machine_is_cardhu()){
+	if (machine_is_cardhu() || machine_is_transformer()){
 		if((button->code <= KEY_POWER) & (button->code >= KEY_VOLUMEDOWN))
 			pr_info("gpio_keys: %s %s\n", state ? "Pressed" : "Released",
 			key_descriptions[button->code - KEY_VOLUMEDOWN]);

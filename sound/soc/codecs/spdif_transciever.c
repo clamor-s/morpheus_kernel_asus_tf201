@@ -80,6 +80,7 @@ static int spdif_dit_probe(struct platform_device *pdev)
     if (machine_is_kai() ||
         machine_is_tegra_enterprise() ||
         machine_is_cardhu() ||
+        machine_is_transformer() ||
         machine_is_tai())
         return snd_soc_register_codec(&pdev->dev,
             &soc_codec_spdif_dit1, &dit_stub_dai, 1);

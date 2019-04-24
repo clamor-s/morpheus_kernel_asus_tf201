@@ -540,7 +540,7 @@ void __init tegra_init_pinmux(void)
 
 	tegra_drive_pinmux_config_table(t30_def_drive_pinmux,
 					ARRAY_SIZE(t30_def_drive_pinmux));
-	if (machine_is_cardhu())
+	if (machine_is_cardhu() || machine_is_transformer())
 		tegra_pinmux_config_table(cardhu_pcbid_pinmux,
 					ARRAY_SIZE(cardhu_pcbid_pinmux));
 }

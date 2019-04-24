@@ -575,7 +575,7 @@ static int tegra_wm8903_init(struct snd_soc_pcm_runtime *rtd)
 
 	machine->bias_level = SND_SOC_BIAS_STANDBY;
 
-	if (machine_is_cardhu() || machine_is_ventana()) {
+	if (machine_is_cardhu() || machine_is_transformer() || machine_is_ventana()) {
 		ret = snd_soc_add_controls(codec, cardhu_controls,
 				ARRAY_SIZE(cardhu_controls));
 		if (ret < 0)
@@ -726,7 +726,7 @@ static __devinit int tegra_wm8903_driver_probe(struct platform_device *pdev)
 	if (ret)
 		goto err_free_machine;
 
-	if (machine_is_cardhu()) {
+	if (machine_is_cardhu() || machine_is_transformer()) {
 		tegra_wm8903_dai[0].codec_name = "wm8903.4-001a",
 		tegra_wm8903_dai[0].cpu_dai_name = "tegra30-i2s.1";
 
