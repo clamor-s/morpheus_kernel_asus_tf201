@@ -9,7 +9,6 @@
 #define BATTERY_USB_STATUS  	          _IOR(BATTERY_IOC_MAGIC, 7,int*)
 #define BATTERY_REBOOT_TEST_TOOL      _IOR(BATTERY_IOC_MAGIC, 8,int)
 #define BATTERY_STATUS 	                         _IOR(BATTERY_IOC_MAGIC, 9,int*)
-#define BOOT_REASON	                         _IOR(BATTERY_IOC_MAGIC, 10,int*)
 
 #define DACKING_INSTERTION (1<0)
 #define DACKING_BATTERY_HIGHER_10  (1<1)
@@ -18,7 +17,6 @@
 #define START_NORMAL (1)
 #define START_HEAVY (2)
 #define IOCTL_ERROR (-1)
-extern unsigned int boot_reason;
 static void battery_strees_test(struct work_struct *work)
 {
 
@@ -38,7 +36,7 @@ long battery_ioctl(struct file *filp,unsigned int cmd, unsigned long arg)
 	if (_IOC_TYPE(cmd) == BATTERY_IOC_MAGIC ){
 	     //printk("  battery_ioctl vaild magic \n");
 		}
-	else	
+	else
 		return -ENOTTY;
 	switch(cmd)
 	{
@@ -53,10 +51,6 @@ long battery_ioctl(struct file *filp,unsigned int cmd, unsigned long arg)
 			}
 		break;
                case BATTERY_REBOOT_TEST_TOOL:
-			break;
-		case BOOT_REASON:
-			(*(int*)arg)=boot_reason;
-			printk(" BATTERY: BOOT_REASON=%u\n",(*(int*)arg));
 			break;
 	  default:  /* redundant, as cmd was checked against MAXNR */
 	           printk(" BATTERY: unknow i2c  stress test  command cmd=%x arg=%lu\n",cmd,arg);

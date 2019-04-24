@@ -41,7 +41,6 @@
 #include "../gpio-names.h"
 #include <mach/board-transformer-misc.h>
 #include "../codecs/wm8903.h"
-#include "../codecs/rt5640.h"
 #include "../../../arch/arm/mach-tegra/board.h"
 #include <mach/pinmux.h>
 #include <mach/pinmux-t3.h>
@@ -120,7 +119,6 @@ struct wake_lock hp_detect_wakelock;
 static bool console_disable;
 extern struct snd_soc_codec *rt5631_audio_codec;
 extern struct snd_soc_codec *wm8903_codec;
-extern struct snd_soc_codec *rt5640_audio_codec;
 struct work_struct headset_work;
 struct work_struct lineout_work;
 struct work_struct hook_work;
@@ -155,7 +153,6 @@ static bool is_support_dock(void)
 		case TEGRA3_PROJECT_TF201:
 		case TEGRA3_PROJECT_TF300T:
 		case TEGRA3_PROJECT_TF300TL:
-		case TEGRA3_PROJECT_TF500T:
 		case TEGRA3_PROJECT_TF700T:
 			support_dock = true;
 			break;
@@ -388,27 +385,8 @@ static int jack_config_gpio()
 
 	ret = irq_set_irq_wake(hs_data->irq, 1);
 
-	switch (project_info) {
-		case TEGRA3_PROJECT_TF201:
-		case TEGRA3_PROJECT_TF300T:
-		case TEGRA3_PROJECT_TF300TG:
-		case TEGRA3_PROJECT_TF300TL:
-		case TEGRA3_PROJECT_TF500T:
-		case TEGRA3_PROJECT_TF700T:
-		case TEGRA3_PROJECT_ME301T:
-		case TEGRA3_PROJECT_ME301TL:
-			/* delay 100ms to wait hook_det stable */
-			msleep(100);
-			break;
-		case TEGRA3_PROJECT_P1801:
-			/* delay 230ms to wait hook_det stable */
-			msleep(230);
-			break;
-		default:
-			/* delay 100ms to wait hook_det stable */
-			msleep(100);
-			break;
-	}
+	/* delay 100ms to wait hook_det stable */
+	msleep(100);
 
 	if (gpio_get_value(JACK_GPIO) == 0){
 		insert_headset();
@@ -626,20 +604,6 @@ static int codec_micbias_power(int on)
 			}
 			CtrlReg = MICBIAS_ENA | MICDET_ENA;
 			snd_soc_write(wm8903_codec, WM8903_MIC_BIAS_CONTROL_0, CtrlReg);
-		}else if(project_info == TEGRA3_PROJECT_TF500T || project_info == TEGRA3_PROJECT_P1801 ||
-				project_info == TEGRA3_PROJECT_ME301T ||
-				project_info == TEGRA3_PROJECT_ME301TL ||
-				project_info == TEGRA3_PROJECT_ME570T){
-			if(rt5640_audio_codec == NULL){
-				printk("%s: No RT5642_codec - set micbias on fail\n", __func__);
-				return 0;
-			}
-			 /* Ensure the power is strong enough to drive MicBias2 */
-			snd_soc_update_bits(rt5640_audio_codec, RT5640_PWR_ANLG1,
-					     RT5640_PWR_MB | RT5640_PWR_VREF2,
-					     RT5640_PWR_MB | RT5640_PWR_VREF2);
-			snd_soc_update_bits(rt5640_audio_codec, RT5640_PWR_ANLG1, RT5640_PWR_LDO2, RT5640_PWR_LDO2); /* Enable LDO2 */
-			snd_soc_update_bits(rt5640_audio_codec, RT5640_PWR_ANLG2, RT5640_PWR_MB1, RT5640_PWR_MB1); /*Enable MicBias1 */
 		}
 	}else{
 		if(project_info == TEGRA3_PROJECT_TF201 || project_info == TEGRA3_PROJECT_TF300TG ||
@@ -660,16 +624,6 @@ static int codec_micbias_power(int on)
 			}
 			CtrlReg = 0;
 			snd_soc_write(wm8903_codec, WM8903_MIC_BIAS_CONTROL_0, CtrlReg);
-		}else if(project_info == TEGRA3_PROJECT_TF500T || project_info == TEGRA3_PROJECT_P1801 ||
-				project_info == TEGRA3_PROJECT_ME301T ||
-				project_info == TEGRA3_PROJECT_ME301TL ||
-				project_info == TEGRA3_PROJECT_ME570T){
-			if(rt5640_audio_codec == NULL){
-				printk("%s: No RT5642_codec - set micbias on fail\n", __func__);
-				return 0;
-			}
-			snd_soc_update_bits(rt5640_audio_codec, RT5640_PWR_ANLG2, RT5640_PWR_MB1, 0); /* Disable MicBias1 */
-			snd_soc_update_bits(rt5640_audio_codec, RT5640_PWR_ANLG1, RT5640_PWR_LDO2, 0); /* Disable LDO2 */
 		}
 	}
 	return 0;
@@ -751,26 +705,8 @@ static int __init headset_init(void)
 		project_info == TEGRA3_PROJECT_ME301TL)
 		INIT_WORK(&hook_work, hook_work_queue);
 
-	switch (project_info) {
-		case TEGRA3_PROJECT_TF201:
-		case TEGRA3_PROJECT_TF300T:
-		case TEGRA3_PROJECT_TF300TG:
-		case TEGRA3_PROJECT_TF300TL:
-		case TEGRA3_PROJECT_TF500T:
-		case TEGRA3_PROJECT_TF700T:
-			hs_data->lineout_gpio = LINEOUT_GPIO;
-			lineout_config_gpio();
-			break;
-		case TEGRA3_PROJECT_ME301T:
-			hs_data->lineout_gpio = LINEOUT_ME301T;
-			lineout_config_no_dock();
-			break;
-		default:
-			hs_data->lineout_gpio = LINEOUT_GPIO;
-			lineout_config_gpio();
-			break;
-	}
-
+	hs_data->lineout_gpio = LINEOUT_GPIO;
+	lineout_config_gpio();
 	jack_config_gpio();/*Config jack detection GPIO*/
 
 	printk(KERN_INFO "%s- #####\n", __func__);

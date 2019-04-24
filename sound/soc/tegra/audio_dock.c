@@ -31,7 +31,6 @@
 
 extern struct snd_soc_codec *wm8903_codec;
 extern struct snd_soc_codec *rt5631_audio_codec;
-extern struct snd_soc_codec *rt5640_audio_codec;
 
 extern bool lineout_alive;
 static bool audio_dock_in = false;
@@ -148,10 +147,6 @@ void audio_dock_init(void)
 			break;
 		case TEGRA3_PROJECT_TF300T:
 			audio_codec = wm8903_codec;
-			break;
-		case TEGRA3_PROJECT_TF500T:
-		case TEGRA3_PROJECT_P1801:
-			audio_codec = rt5640_audio_codec;
 			break;
 		default:
 			break;

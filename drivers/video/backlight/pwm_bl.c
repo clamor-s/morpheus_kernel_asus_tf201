@@ -53,7 +53,6 @@ static struct i2c_client        *client_panel_p1801;
 u8 scalar_fw_version;
 u8 scalar_fw_subversion;
 u8 p1801_panel_type;
-extern int scalar_update_status;	// 2: proceeding, -1: fail
 #define scalar_status                   TEGRA_GPIO_PH4  //0:android, 1: windows
 extern int brightness_flag;
 
@@ -617,19 +616,6 @@ static int pwm_backlight_update_status(struct backlight_device *bl)
 	}
 
 	if (brightness == 0) {
-                if (tegra3_get_project_id()==TEGRA3_PROJECT_P1801
-                                && client_count_p1801 !=0
-                                && bl_enable_sleep_control
-                                && scalar_update_status!=2
-                                && scalar_update_status!=-1
-                                && P1801_writebacklight_flag) {
-                        //printk_DEBUG("%s: call P1801_write_backlight, brightness_no_DIDIM=%d, brightness=%d\n"
-                        //                , __func__, brightness_no_DIDIM, brightness);
-                        //error = P1801_write_backlight(client_panel_p1801, brightness_no_DIDIM, brightness);
-                        //printk_DEBUG("%s: write error? =%d\n", __func__, error);
-                        P1801_writebacklight_flag = 0;
-                }
-
 		if(tegra3_get_project_id()==TEGRA3_PROJECT_ME301T && ME301T_panel_8v) {
 			if(bl_enable_sleep_control)
 			{
@@ -694,26 +680,6 @@ static int pwm_backlight_update_status(struct backlight_device *bl)
 		if (tegra3_get_project_id()==0x4 ){
                         init_mipi_bridge();
 		}
-
-                if (tegra3_get_project_id()==TEGRA3_PROJECT_P1801
-                                && client_count_p1801 !=0
-                                && scalar_update_status!=2
-                                && scalar_update_status!=-1
-                                && P1801_writebacklight_flag) {
-
-                        if(!gpio_get_value(scalar_status)) {
-                                printk_DEBUG("%s: call P1801_write_backlight, brightness_no_DIDIM=%d, brightness=%d\n"
-                                                , __func__, brightness_no_DIDIM, brightness);
-                                //the max value of p1801 hdmi display backlight is 255, need not convert
-                                error = P1801_write_backlight(client_panel_p1801, brightness_no_DIDIM, brightness);
-                                printk_DEBUG("%s: write error? =%d\n", __func__, error);
-                        } else {
-                                printk_DEBUG("%s: scalar display windows, cannot change backlight."
-                                                , __func__);
-                                printk_DEBUG("brightness_no_DIDIM=%d, brightness=%d\n"
-                                                , brightness_no_DIDIM, brightness);
-                        }
-                }
 
 		brightness = pb->lth_brightness +
 			(brightness * (pb->period - pb->lth_brightness) / max);
