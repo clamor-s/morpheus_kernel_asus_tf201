@@ -213,15 +213,11 @@ obj-${CONFIG_TEGRA_BB_XMM_POWER2}       += baseband-xmm-power2.o
 
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-kbc.o
-obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-irda.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-panel.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-pinmux.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-power.o
-obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-pm298-power-rails.o
-obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-pm299-power-rails.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-sdhci.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-sensors.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-memory.o
-obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-powermon.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-misc.o
 obj-${CONFIG_MACH_TRANSFORMER}          += board-transformer-vibrator.o
