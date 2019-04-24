@@ -1282,7 +1282,7 @@ static const char *cardhu_dt_board_compat[] = {
 	NULL
 };
 
-MACHINE_START(CARDHU, "transformer")
+MACHINE_START(TRANSFORMER, "transformer")
 	.boot_params    = 0x80000100,
 	.map_io         = tegra_map_common_io,
 	.reserve        = tegra_cardhu_reserve,
