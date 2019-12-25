@@ -2957,7 +2957,7 @@ static int sensor_probe(struct i2c_client *client,
 {
 	int err=0;
 
-	pr_info("yuv %s, compiled at %s %s\n",__func__,__DATE__,__TIME__);
+	pr_info("yuv i7002a %s, compiled at %s %s\n",__func__,__DATE__,__TIME__);
 
 	info = kzalloc(sizeof(struct sensor_info), GFP_KERNEL);
 
@@ -3247,6 +3247,9 @@ static ssize_t dbg_i7002a_page_dump_read(struct file *file, char __user *buf, si
 	if (*ppos)
 		return 0;	/* the end */
 
+	if (!info)
+		return 0;
+
 	i7002a_isp_on(1);
 
 	len = snprintf(bp, dlen, "page_index=%d (0x%X)\n", dbg_i7002a_page_index, dbg_i7002a_page_index);
@@ -3300,6 +3303,9 @@ static ssize_t dbg_i7002a_bin_dump_read(struct file *file, char __user *buf, siz
 
 	if (*ppos)
 		return 0;	/* the end */
+
+	if (!info)
+		return 0;
 
 	i7002a_isp_on(1);
 
@@ -3419,6 +3425,9 @@ static ssize_t dbg_i7002a_fw_header_dump_read(struct file *file, char __user *bu
 	if (*ppos)
 		return 0;	/* the end */
 
+	if (!info)
+		return 0;
+
 	i7002a_isp_on(1);
 
 	/* dump fw1 header */
@@ -3490,6 +3499,9 @@ static ssize_t dbg_fw_update_read(struct file *file, char __user *buf, size_t co
 
 	if (*ppos)
 		return 0;	/* the end */
+
+	if (!info)
+		return 0;
 
 	switch(fw_update_status) {
 	case ICATCH_FW_NO_CMD:
@@ -3663,6 +3675,11 @@ static ssize_t dbg_iCatch7002a_vga_status_read(struct file *file, char __user *b
 	if (*ppos)
 		return 0;	/* the end */
 
+	if (!info)
+	{
+		return 0;
+	}
+
 	if (sensor_opened == false) {
 		if (info->pdata && info->pdata->power_on) {
 			info->pdata->power_on();
@@ -3790,6 +3807,11 @@ static ssize_t dbg_iCatch7002a_camera_status_read(struct file *file, char __user
 
 	if (*ppos)
 		return 0;	/* the end */
+
+	if (!info)
+	{
+		return 0;
+	}
 
 	if (sensor_opened == false) {
 		if (info->pdata && info->pdata->power_on) {
