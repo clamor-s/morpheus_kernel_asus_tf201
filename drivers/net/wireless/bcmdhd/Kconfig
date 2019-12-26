@@ -24,6 +24,13 @@ config BCMDHD_NVRAM_PATH
 	---help---
 	  Path to the calibration file.
 
+config BCMDHD_TF_PATH_EXTENSION
+	bool "Enable path branching"
+	depends on BCMDHD
+	default n
+	---help---
+	  Support device based nvram path and name.
+
 config BCMDHD_WEXT
 	bool "Enable WEXT support"
 	depends on BCMDHD && CFG80211 = n
