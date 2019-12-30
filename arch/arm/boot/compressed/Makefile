@@ -153,6 +153,12 @@ lib1funcs = $(obj)/lib1funcs.o
 $(obj)/lib1funcs.S: $(srctree)/arch/$(SRCARCH)/lib/lib1funcs.S
 	$(call cmd,shipped)
 
+# For __aeabi_llsl
+ashldi3 = $(obj)/ashldi3.o
+
+$(obj)/ashldi3.S: $(srctree)/arch/$(SRCARCH)/lib/ashldi3.S FORCE
+	$(call cmd,shipped)
+
 # We need to prevent any GOTOFF relocs being used with references
 # to symbols in the .bss section since we cannot relocate them
 # independently from the rest at run time.  This can be achieved by
@@ -166,14 +172,16 @@ bad_syms=$$($(CROSS_COMPILE)nm $@ | sed -n 's/^.\{8\} [bc] \(.*\)/\1/p') && \
   ( echo "following symbols must have non local/private scope:" >&2; \
     echo "$$bad_syms" >&2; rm -f $@; false )
 
-# For __aeabi_llsl
-ashldi3 = $(obj)/ashldi3.o
-
-$(obj)/ashldi3.S: $(srctree)/arch/$(SRCARCH)/lib/ashldi3.S FORCE
-	$(call cmd,shipped)
+check_for_multiple_zreladdr = \
+if [ $(words $(ZRELADDR)) -gt 1 -a "$(CONFIG_AUTO_ZRELADDR)" == "" ]; then \
+	echo 'multiple zreladdrs: $(ZRELADDR)'; \
+	echo 'This needs CONFIG_AUTO_ZRELADDR to be set'; \
+	false; \
+fi
 
 $(obj)/vmlinux: $(obj)/vmlinux.lds $(obj)/$(HEAD) $(obj)/piggy.$(suffix_y).o \
 	 	$(addprefix $(obj)/, $(OBJS)) $(lib1funcs) $(ashldi3) FORCE
+	@$(check_for_multiple_zreladdr)
 	$(call if_changed,ld)
 	@$(check_for_bad_syms)
 
