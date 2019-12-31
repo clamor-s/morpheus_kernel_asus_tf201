@@ -29,6 +29,7 @@
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/hardirq.h>
+#include <linux/err.h>
 #include <crypto/algapi.h>
 #include <crypto/cryptd.h>
 #include <crypto/ablk_helper.h>
