@@ -50,7 +50,7 @@
 /* tegra throttling and edp governors require frequencies in the table
    to be in ascending order */
 static struct cpufreq_frequency_table *freq_table;
-static unsigned int freq_table_size=0;;
+
 static struct clk *cpu_clk;
 static struct clk *emc_clk;
 static struct clk *cpu_lp_clk;
@@ -840,20 +840,9 @@ static int tegra_target(struct cpufreq_policy *policy,
 	if (ret)
 		goto _out;
 
-	if( (ret >= 0) && (idx >= 0) && (idx < freq_table_size) )
 	freq = freq_table[idx].frequency;
-	else{
-		printk("[warning] tegra_target ret=%d idx=%d cpu=%u\n", ret, idx, policy->cpu);
-		goto _out;
-	}
-
-	cpu=policy->cpu;
-	if( cpu >= 0 && cpu < nr_cpu_ids){
-		target_cpu_speed[cpu] = freq;
+	target_cpu_speed[cpu] = freq;
 	ret = tegra_cpu_set_speed_cap(&new_speed);
-	}else
-		printk("[warning] tegra_target cpu=%u\n",policy->cpu);
-
 
 _out:
 	mutex_unlock(&tegra_cpu_lock);
