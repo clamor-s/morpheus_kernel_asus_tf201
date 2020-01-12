@@ -162,11 +162,11 @@ static inline int rt5631_write(struct snd_soc_codec *codec,
 
 	if(ret == 0){
 		rt5631_write_reg_cache(codec, reg, val);
-                return 0;
+		return 0;
 	}else{
-                printk(KERN_ERR "%s failed\n", __func__);
-                return -EIO;
-        }
+		printk(KERN_ERR "%s failed\n", __func__);
+		return -EIO;
+	}
 
 }
 
@@ -185,9 +185,9 @@ static inline unsigned int rt5631_read(struct snd_soc_codec *codec,
 		return value;
 	} else {
 		printk(KERN_ERR "%s failed\n", __func__);
-              value = rt5631_read_reg_cache(codec, reg);
-              printk(KERN_ERR "%s failed, fetch from cache[0x%02X]=0x%02X\n", __func__, reg, value);
-              return value;
+	      value = rt5631_read_reg_cache(codec, reg);
+	      printk(KERN_ERR "%s failed, fetch from cache[0x%02X]=0x%02X\n", __func__, reg, value);
+	      return value;
 	}
 
 }
@@ -290,7 +290,7 @@ static struct rt5631_init_reg init_list[] = {
 	{RT5631_SPK_MONO_OUT_CTRL	, 0x6c00},
 	{RT5631_GEN_PUR_CTRL_REG	, 0x7e00}, //Speaker AMP ratio gain is 1.99X (5.99dB)
 	{RT5631_SPK_MONO_HP_OUT_CTRL	, 0x0000},
-	{RT5631_MIC_CTRL_1        	, 0x8000}, //change Mic1 to differential mode,mic2 to single end mode
+	{RT5631_MIC_CTRL_1		, 0x8000}, //change Mic1 to differential mode,mic2 to single end mode
 	{RT5631_INT_ST_IRQ_CTRL_2	, 0x0f18},
 	{RT5631_ALC_CTRL_1	, 0x0B00}, //ALC Attack time  = 170.667ms, Recovery time = 83.333us
 	{RT5631_ALC_CTRL_3  , 0x2410}, //Enable for DAC path, Limit level = -6dBFS
@@ -368,8 +368,8 @@ struct hw_eq_preset hweq_preset[] = {
 		0x1EB2, 0xFA19, 0xC5FC, 0x1C10, 0x095B, 0x1561,
 		0x0699,0xC18B,0x1E7F,0x1F3D},0x402A, 0x8003, 0x0005},
 	{TF300TL ,{0x1CD0,0x1D18,0xC21C,0x1E30,0xF900,0xC2C8,0x1EC4,
-                0x095B,0xCA22,0x1C10,0x1830,0xF76D,0x0FEC,0xC130,
-                0x1ED6,0x1F69},0x403F, 0x8004, 0x0005},
+		0x095B,0xCA22,0x1C10,0x1830,0xF76D,0x0FEC,0xC130,
+		0x1ED6,0x1F69},0x403F, 0x8004, 0x0005},
 
 };
 
@@ -795,9 +795,9 @@ static int spk_event(struct snd_soc_dapm_widget *w,
 			if((tf700t_pcb_id == TF700T_PCB_ER1) &&
 				(project_id == TEGRA3_PROJECT_TF700T)){
 			   rt5631_write_mask(codec,
-                               RT5631_SPK_OUT_VOL,0x0d00, RT5631_L_VOL_MASK);
+			       RT5631_SPK_OUT_VOL,0x0d00, RT5631_L_VOL_MASK);
 			   printk("%s: %s\n",
-                              __func__, "TF700T ER1 spk L ch vol = -7.5dB");
+			      __func__, "TF700T ER1 spk L ch vol = -7.5dB");
 			}
 
 			rt5631_write_mask(codec, RT5631_PWR_MANAG_ADD4,
@@ -819,10 +819,10 @@ static int spk_event(struct snd_soc_dapm_widget *w,
 			}
 			if((tf700t_pcb_id == TF700T_PCB_ER1) &&
 				(project_id  == TEGRA3_PROJECT_TF700T)){
-                            rt5631_write_mask(codec,
-                                RT5631_SPK_OUT_VOL,0x000d, RT5631_R_VOL_MASK);
-                            printk("%s: %s\n",
-                               __func__, "TF700T ER1 spk R ch vol = -7.5dB");
+			    rt5631_write_mask(codec,
+				RT5631_SPK_OUT_VOL,0x000d, RT5631_R_VOL_MASK);
+			    printk("%s: %s\n",
+			       __func__, "TF700T ER1 spk R ch vol = -7.5dB");
 			}
 
 			rt5631_write_mask(codec, RT5631_PWR_MANAG_ADD4,
@@ -2048,7 +2048,7 @@ static void DumpRT5631Q(struct snd_soc_codec *codec)
 	}
 }
 
-static int audio_codec_stress()
+static int audio_codec_stress(void)
 {
 	u16 temp;
 
@@ -2073,7 +2073,7 @@ int audio_codec_open(struct inode *inode, struct file *filp)
 }
 
 long audio_codec_ioctl(struct file *filp,
-                 unsigned int cmd, unsigned long arg)
+		 unsigned int cmd, unsigned long arg)
 {
 	char tmp[3];
 	u8 address;
@@ -2155,8 +2155,8 @@ long audio_codec_ioctl(struct file *filp,
 					break;
 			       case OUTPUT_SOURCE_NORMAL:
 				case OUTPUT_SOURCE_VOICE:
-                                        printk("AUDIO_CODEC: Capture mode [%s]\n",
-                                                 arg == OUTPUT_SOURCE_NORMAL ? "NORMAL" : "VOICE");
+					printk("AUDIO_CODEC: Capture mode [%s]\n",
+						 arg == OUTPUT_SOURCE_NORMAL ? "NORMAL" : "VOICE");
 					output_source=arg;
 					break;
 				default:
@@ -2183,86 +2183,86 @@ static struct miscdevice i2c_audio_device = {
 };
 
 static ssize_t read_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x05, 0x01};
+	char data1[2] = {0x05, 0x01};
 	char data3[8] = {0};
 	int i = 0;
-        asusAudiodec_i2c_write_data(data1, 2);
-        asusAudiodec_i2c_read_data(data3, 8);
-        for( i = 0; i < 8; i++){
-             printk("index: %d data = %d\n", i, data3[i]);
-        }
-        return sprintf(buf, "use command: dmesg -c \n");
+	asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_read_data(data3, 8);
+	for( i = 0; i < 8; i++){
+	     printk("index: %d data = %d\n", i, data3[i]);
+	}
+	return sprintf(buf, "use command: dmesg -c \n");
 }
 DEVICE_ATTR(read_audio_dock, S_IRUGO, read_audio_dock_status, NULL);
 
 
 static ssize_t unmute1_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x01, 0x01};
+	char data1[2] = {0x01, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "unmute\n");
+	return sprintf(buf, "unmute\n");
 }
 DEVICE_ATTR(unmute1_audio_dock, S_IRUGO, unmute1_audio_dock_status, NULL);
 
 static ssize_t unmute2_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x02, 0x01};
+	char data1[2] = {0x02, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "unmute\n");
+	return sprintf(buf, "unmute\n");
 }
 DEVICE_ATTR(unmute2_audio_dock, S_IRUGO, unmute2_audio_dock_status, NULL);
 
 
 static ssize_t unmute3_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x03, 0x01};
+	char data1[2] = {0x03, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "unmute\n");
+	return sprintf(buf, "unmute\n");
 }
 DEVICE_ATTR(unmute3_audio_dock, S_IRUGO, unmute3_audio_dock_status, NULL);
 
 
 static ssize_t unmute4_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x04, 0x01};
+	char data1[2] = {0x04, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "unmute\n");
+	return sprintf(buf, "unmute\n");
 }
 DEVICE_ATTR(unmute4_audio_dock, S_IRUGO, unmute4_audio_dock_status, NULL);
 
 static ssize_t unmute_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0x00, 0x01};
+	char data1[2] = {0x00, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "unmute\n");
+	return sprintf(buf, "unmute\n");
 }
 DEVICE_ATTR(unmute_audio_dock, S_IRUGO, unmute_audio_dock_status, NULL);
 
 static ssize_t mute_audio_dock_status(struct device *dev,
-        struct device_attribute *attr, char *buf)
+	struct device_attribute *attr, char *buf)
 {
-        char data1[2] = {0xff, 0x01};
+	char data1[2] = {0xff, 0x01};
 
-        asusAudiodec_i2c_write_data(data1, 2);
+	asusAudiodec_i2c_write_data(data1, 2);
 
-        return sprintf(buf, "mute\n");
+	return sprintf(buf, "mute\n");
 }
 DEVICE_ATTR(mute_audio_dock, S_IRUGO, mute_audio_dock_status, NULL);
 
@@ -2342,7 +2342,7 @@ static u32 read_codec_value=0;
 
 
 //static ssize_t rt5631_codec_reg_show(struct class *cls, char *_buf)
-static ssize_t rt5631_codec_reg_show(struct device *dev,struct device_attribute *attr ,char *buf)
+static ssize_t rt5631_codec_reg_show(struct device *dev,struct device_attribute *attr, char *buf)
 {
 	if(last_command==READ_REG)
 	{
@@ -2686,19 +2686,8 @@ static int rt5631_probe(struct snd_soc_codec *codec)
 	unsigned int val;
 	int ret;
 
-	ret = gpio_request(CODEC_SPKVDD_POWER_5V0_EN_GPIO, "RT5631_5V");
-	if (ret) {
-		printk("gpio_request failed for input %d\n", CODEC_SPKVDD_POWER_5V0_EN_GPIO);
-	}
-	ret = gpio_direction_output(CODEC_SPKVDD_POWER_5V0_EN_GPIO, 1) ;
-	if (ret) {
-		printk("gpio_direction_output failed for input %d\n", CODEC_SPKVDD_POWER_5V0_EN_GPIO);
-	}
-	printk("GPIO = %d , state = %d\n", CODEC_SPKVDD_POWER_5V0_EN_GPIO,
-			gpio_get_value(CODEC_SPKVDD_POWER_5V0_EN_GPIO));
-	gpio_set_value(CODEC_SPKVDD_POWER_5V0_EN_GPIO, 1);
-
 	project_id = tegra3_get_project_id();
+
 	ret = snd_soc_codec_set_cache_io(codec, 8, 16, SND_SOC_I2C);
 	if (ret != 0) {
 		dev_err(codec->dev, "Failed to set cache I/O: %d\n", ret);
@@ -2754,49 +2743,49 @@ static int rt5631_probe(struct snd_soc_codec *codec)
 			"Failed to create audio_codec_status sysfs files: %d\n", ret);
 		return ret;
 	}
-        ret = device_create_file(codec->dev, &dev_attr_mute_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
-        ret = device_create_file(codec->dev, &dev_attr_unmute_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
-        ret = device_create_file(codec->dev, &dev_attr_read_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
+	ret = device_create_file(codec->dev, &dev_attr_mute_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
+	ret = device_create_file(codec->dev, &dev_attr_unmute_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
+	ret = device_create_file(codec->dev, &dev_attr_read_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
 
-        ret = device_create_file(codec->dev, &dev_attr_unmute1_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
-        ret = device_create_file(codec->dev, &dev_attr_unmute2_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
-        ret = device_create_file(codec->dev, &dev_attr_unmute3_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
-        ret = device_create_file(codec->dev, &dev_attr_unmute4_audio_dock);
-        if (ret != 0) {
-                dev_err(codec->dev,
-                        "Failed to create audio_codec_status sysfs files: %d\n", ret);
-                return ret;
-        }
+	ret = device_create_file(codec->dev, &dev_attr_unmute1_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
+	ret = device_create_file(codec->dev, &dev_attr_unmute2_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
+	ret = device_create_file(codec->dev, &dev_attr_unmute3_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
+	ret = device_create_file(codec->dev, &dev_attr_unmute4_audio_dock);
+	if (ret != 0) {
+		dev_err(codec->dev,
+			"Failed to create audio_codec_status sysfs files: %d\n", ret);
+		return ret;
+	}
 
 	if(rt5631_read(rt5631_codec, RT5631_VENDOR_ID1) == 0x10EC)
 		audio_codec_status = 1;
@@ -2831,9 +2820,9 @@ static int rt5631_suspend(struct snd_soc_codec *codec, pm_message_t state)
 
 static int rt5631_resume(struct snd_soc_codec *codec)
 {
-	printk(KERN_INFO "%s+ #####\n", __func__);
 	struct rt5631_priv *rt5631 = snd_soc_codec_get_drvdata(codec);
 
+	printk(KERN_INFO "%s+ #####\n", __func__);
 	rt5631_write_mask(codec, RT5631_PWR_MANAG_ADD3,
 		PWR_VREF | PWR_MAIN_BIAS, PWR_VREF | PWR_MAIN_BIAS);
 	schedule_timeout_uninterruptible(msecs_to_jiffies(110));
@@ -2893,7 +2882,6 @@ static int rt5631_i2c_probe(struct i2c_client *i2c,
 {
 	struct rt5631_priv *rt5631;
 	int ret;
-	printk("%s+\n", __func__);
 	pr_info("RT5631 Audio Codec %s\n", RT5631_VERSION);
 	audio_codec_status = 0;
 
@@ -2913,8 +2901,9 @@ static int rt5631_i2c_probe(struct i2c_client *i2c,
 			rt5631_dai, ARRAY_SIZE(rt5631_dai));
 	if (ret < 0)
 		kfree(rt5631);
+
 	INIT_DELAYED_WORK(&poll_audio_work, audio_codec_stress);
-	printk("%s-\n", __func__);
+
 	return ret;
 }
 
@@ -2925,13 +2914,9 @@ static __devexit int rt5631_i2c_remove(struct i2c_client *client)
 	return 0;
 }
 
-static int rt5631_i2c_shutdown(struct i2c_client *client)
+static void rt5631_i2c_shutdown(struct i2c_client *client)
 {
-
-	printk(KERN_INFO "%s+ #####\n", __func__);
 	rt5631_set_bias_level(rt5631_codec, SND_SOC_BIAS_OFF);
-	printk(KERN_INFO "%s- #####\n", __func__);
-	return 0;
 }
 
 struct i2c_driver rt5631_i2c_driver = {
@@ -2947,38 +2932,28 @@ struct i2c_driver rt5631_i2c_driver = {
 
 static int codec_3v3_power_switch_init(void)
 {
-	printk("%s\n", __func__);
-
-	u32 project_info = tegra3_get_project_id();
 	int ret = 0;
 
-	if(project_info == TEGRA3_PROJECT_TF700T){
-		ret = gpio_request(RT5631_3V3_POWER_EN, "rt5631_3v3_power_control");
-		if(ret < 0){
-			printk("rt5631_3v3_power_control: request rt5631_3v3_power_control fail! : %d\n", ret);
+	if(tegra3_get_project_id() == TEGRA3_PROJECT_TF700T) {
+		ret = gpio_request(TEGRA_GPIO_PP0, "rt5631_3v3_power_control");
+		if(!ret) {
+			ret = gpio_direction_output(TEGRA_GPIO_PP0, 1);
+			if(ret < 0) {
+				gpio_free(TEGRA_GPIO_PP0);
+				pr_err("%s: error in setting rt5631_3v3_power_control as output\n", __func__);
+			}
+		} else {
+			pr_err("%s: error in gpio request for rt5631_3v3_power_control\n", __func__);
 			return ret;
 		}
-		ret = gpio_direction_output(RT5631_3V3_POWER_EN, 1);
-		if(ret < 0){
-			printk("rt5631_3v3_power_control: set rt5631_3v3_power_control as output fail! : %d\n", ret);
-		}
-		gpio_free(RT5631_3V3_POWER_EN);
 	}
 	return ret;
 }
 
 static int __init rt5631_modinit(void)
 {
-	int ret = 0;
-	printk(KERN_INFO "%s+ #####\n", __func__);
-
 	codec_3v3_power_switch_init();
-
-	ret = i2c_add_driver(&rt5631_i2c_driver);
-
-	printk(KERN_INFO "%s- #####\n", __func__);
-	return ret;
-
+	return i2c_add_driver(&rt5631_i2c_driver);
 }
 module_init(rt5631_modinit);
 
