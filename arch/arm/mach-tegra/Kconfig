@@ -600,6 +600,24 @@ config TEGRA_SKIN_THROTTLE
 	  Enable throttling to control the temperature of the skin/case
 	  of the device.
 
+config LP_OVERCLOCK
+	bool "Enable LP overclock for Tegra3"
+	depends on TEGRA_SILICON_PLATFORM
+	default n
+	---help---
+	  Choose y to overclock the LP core.
+	  If Off, maximum clock speed is 475 MHz.
+	  If On, LP clock speed can be selected.
+
+config GPU_OVERCLOCK
+	bool "Enable GPU overclock for Tegra3"
+	depends on TEGRA_SILICON_PLATFORM
+	default n
+	---help---
+	  Choose y to overclock the GPU.
+	  If Off, maximum clock speed is 416 MHz.
+	  If On, GPU clock speed can be selected.
+
 config TEGRA_LP1_950
 	bool "LP1 low core voltage"
 	default n
